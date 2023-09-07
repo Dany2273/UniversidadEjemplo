@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 public class Conexion {
     
-    private static final String URL = "jdbc:mysql://localhost/";
+    private static final String URL = "jdbc:mariadb://localhost/";
     private static final String DB = "universidadulp";
     private static final String USUARIO = "root";
     private static String PASSWORD = "";
@@ -22,15 +22,16 @@ public class Conexion {
     
     private Conexion(){}
     
-    public static Connection getConexion(){
+    public static Connection getConexion(){ //--->Devuelve un objeto de tipo Connection
     
-        if(connection == null){
+        if(connection == null){ //---> Continuamos solo si es la primera vez que establecemos una conexion
             
             try {
-                Class.forName("org.mariadb.jdbc.Driver");
-                // Establece la conexion con la base de datos
-                connection = DriverManager.getConnection(URL+DB+"?useLegacyDatetimeCode=false&serverTimezone=UTC"+
-                        "&user="+USUARIO+"&password="+PASSWORD);
+                Class.forName("org.mariadb.jdbc.Driver");//---> Cargamos los Drivers de conexion
+                connection = DriverManager.getConnection(URL+DB,USUARIO,PASSWORD);//--->Establecemos la conexion a la base de datos
+                
+                JOptionPane.showMessageDialog(null, "Conexion Exitosa!");
+                
             } catch (ClassNotFoundException ex) {
                JOptionPane.showMessageDialog(null, "Error al cargar los Drivers "+ex.getMessage());
             } catch (SQLException ex) {
