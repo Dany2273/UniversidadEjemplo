@@ -7,8 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class AlumnoData {
@@ -64,8 +62,39 @@ public class AlumnoData {
         }
     }
 
-    public int buscarAlumno(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Alumno buscarAlumno(int id) {//En este caso buscamos un alumno solo por el ID
+        String sql = "SELECT dni, apellido, nombre, fechaNacimiento"
+                + " FROM alumno WHERE idAlumno = ? AND estado = 1";
+        
+        Alumno alumno = null;//Utilizo una variable alumno para poder mostrar los datos
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);//Reemplazamos el comodin "?" por el id del alumno que ingresamos por parametro
+            
+            /*Cada vez que necesitemos buscar y mostrar datos necesitamos usar la 
+            sentencia ResulSet, que nos va a mostrar el resultado en la terminal*/
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){//Comprobamos si hay algun elemento
+                
+                alumno = new Alumno();//Creo un alumno con el constructor vacio
+                //Y a continuacion le seteo todos los datos
+               alumno.setIdAlumno(id);
+               alumno.setDni(rs.getInt("dni"));
+               alumno.setApellido(rs.getString("apellido"));
+               alumno.setNombre(rs.getString("nombre"));
+               alumno.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+               alumno.setEstado(true);
+            }else{
+                JOptionPane.showMessageDialog(null, "No existe ese Alumno");
+            }
+            ps.close();
+            
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno");
+        }
+        return alumno;
     }
 
     public int buscarAlumnoPorDni(int dni) {
