@@ -28,7 +28,7 @@ public class AlumnoData {
         //Establecemos la sentencia insert como en mysql
         String sql = "INSERT INTO alumno (dni, apellido, nombre, fechaNacimiento, estado)"
                 + "VALUES (? ,? ,? ,? ,?)";
-        /*En este caso, como los datos que van en el insert los recibo del alumno que viene por parametro,
+        /*En este caso, como los datos que van en el insert los recibimos del alumno que viene por parametro,
         lo que hacemos es poner caracteres comodines "?" que luego van a ser reemplazados por los 
         datos que corresponden*/
        
@@ -36,8 +36,8 @@ public class AlumnoData {
             //Generamos el objeto PreparedStatement para enviar la sentencia
             
             PreparedStatement ps = con.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
-            /*Ademas de la sentencia SQL, pero además, como vamos a hacr un INSERT, le pedimos que nos 
-            devuelva la lista con las claves generadas ID*/
+            /*Ademas de la sentencia SQL como vamos a hacr un INSERT, le pedimos que nos 
+            devuelva la lista con las claves generadas "ID" */
             
             ps.setInt(1, alumno.getDni());
             ps.setString(2, alumno.getApellido());
