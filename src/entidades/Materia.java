@@ -2,24 +2,24 @@
 package entidades;
 
 
-public class materia {
+public class Materia {
     
     private int idMateria;
     private String nombre;
     private int añoMateria;
     private boolean activo;
 
-    public materia() {
+    public Materia() {
     }
 
-    public materia(int idMateria, String nombre, int añoMateria, boolean activo) {
+    public Materia(int idMateria, String nombre, int añoMateria, boolean activo) {
         this.idMateria = idMateria;
         this.nombre = nombre;
         this.añoMateria = añoMateria;
         this.activo = activo;
     }
 
-    public materia(String nombre, int añoMateria, boolean activo) {
+    public Materia(String nombre, int añoMateria, boolean activo) {
         this.nombre = nombre;
         this.añoMateria = añoMateria;
         this.activo = activo;

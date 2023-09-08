@@ -2,24 +2,24 @@
 package entidades;
 
 
-public class inscripcion {
+public class Inscripcion {
     
     private int idInscripcion;
-    private alumno alum;
-    private materia mat;
+    private Alumno alum;
+    private Materia mat;
     private double nota;
 
-    public inscripcion() {
+    public Inscripcion() {
     }
 
-    public inscripcion(int idInscripcion, alumno alum, materia mat, double nota) {
+    public Inscripcion(int idInscripcion, Alumno alum, Materia mat, double nota) {
         this.idInscripcion = idInscripcion;
         this.alum = alum;
         this.mat = mat;
         this.nota = nota;
     }
 
-    public inscripcion(alumno alum, materia mat, double nota) {
+    public Inscripcion(Alumno alum, Materia mat, double nota) {
         this.alum = alum;
         this.mat = mat;
         this.nota = nota;
@@ -33,19 +33,19 @@ public class inscripcion {
         this.idInscripcion = idInscripcion;
     }
 
-    public alumno getAlum() {
+    public Alumno getAlum() {
         return alum;
     }
 
-    public void setAlum(alumno alum) {
+    public void setAlum(Alumno alum) {
         this.alum = alum;
     }
 
-    public materia getMat() {
+    public Materia getMat() {
         return mat;
     }
 
-    public void setMat(materia mat) {
+    public void setMat(Materia mat) {
         this.mat = mat;
     }
 
