@@ -41,11 +41,10 @@ public class UniversidadEJemplo {
 //        }
             
           Alumno alumnoEncontrado = alu.buscarAlumnoPorDni(41901122);
-            
-        if(alumnoEncontrado!=null){
+          
             System.out.println("nombre: "+alumnoEncontrado.getNombre());
             System.out.println("apellido: "+alumnoEncontrado.getApellido());
-        }
+//       
        
     }
     

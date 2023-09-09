@@ -101,8 +101,8 @@ public class AlumnoData {
 
     public Alumno buscarAlumnoPorDni(int dni) {
         
-        String sql = "SELECT idAlumno, apellido, nombre, fechaNacimiento"
-                + " FROM alumno WHERE dni = ? AND estado = 1";
+        String sql = "SELECT idAlumno, dni, apellido, nombre, fechaNacimiento, estado "
+                + "FROM alumno WHERE dni = ? AND estado = 1";
         Alumno alumno = null;
         try {
             PreparedStatement ps = con.prepareStatement(sql); 
@@ -111,7 +111,7 @@ public class AlumnoData {
             
             if(rs.next()){
                 alumno = new Alumno();
-                 alumno.setIdAlumno(rs.getInt("idAlumno"));
+               alumno.setIdAlumno(rs.getInt("idAlumno"));
                alumno.setDni(rs.getInt("dni"));
                alumno.setApellido(rs.getString("apellido"));
                alumno.setNombre(rs.getString("nombre"));
@@ -122,11 +122,13 @@ public class AlumnoData {
             }
             ps.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno");
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno"+ex.getMessage());
         }
         return alumno;
     }
 
+    
+    
     public List<Alumno> listarAlumnos() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
