@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -129,8 +130,34 @@ public class AlumnoData {
 
     
     
-    public List<Alumno> listarAlumnos() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Alumno> listarAlumnos() {//Metodo que devuelve una lista de alumnos
+        List<Alumno> alumnos = new ArrayList<>();
+        String sql = "SELECT idAlumno, dni, apellido, nombre, fechaNacimiento FROM alumno WHERE estado = 1 ";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            /*Como el ResultSet va a devolver mas de una fila,
+            recorremos el resultado con un While.*/
+            while(rs.next()){
+                
+               Alumno alumno = new Alumno();//Creo un alumno y voy seteando los atributos
+               alumno.setIdAlumno(rs.getInt("idAlumno"));
+               alumno.setDni(rs.getInt("dni"));
+               alumno.setApellido(rs.getString("apellido"));
+               alumno.setNombre(rs.getString("nombre"));
+               alumno.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+               alumno.setEstado(true);
+                
+               alumnos.add(alumno);//En cada vuelta del While va a ir agregando un alumno
+               
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno"+ex.getMessage());
+        }
+        return alumnos;//Retorno la lista de alumnos
+        
     }
 
     public void modificarAlumno(Alumno alumno) {//Recibe por parametro un alumno ya existente en la BD

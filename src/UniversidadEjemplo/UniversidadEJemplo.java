@@ -39,13 +39,25 @@ public class UniversidadEJemplo {
 //        System.out.println("apellido: "+alumnoEncontrado.getApellido());
 //        System.out.println("nombre: "+alumnoEncontrado.getNombre());  
 //        }
-            
-          Alumno alumnoEncontrado = alu.buscarAlumnoPorDni(41901122);
-          
-            System.out.println("nombre: "+alumnoEncontrado.getNombre());
-            System.out.println("apellido: "+alumnoEncontrado.getApellido());
-//       
-       
+           
+//          /*Para la busqueda por DNI son los mismos pasos anteriores*/
+//          Alumno alumnoEncontrado = alu.buscarAlumnoPorDni(41901122);
+//          
+//            System.out.println("nombre: "+alumnoEncontrado.getNombre());
+//            System.out.println("apellido: "+alumnoEncontrado.getApellido());
+    
+      /*A la hora de obtener una lista de alumnos, primero creamos un objeto AlumnoData,
+         luego recorremos con un FOR la lista de alumnos, y por ultimo dentro del For,
+        solicitamos los datos a mostrar*/
+      for(Alumno alumno:alu.listarAlumnos()){
+          System.out.println("ID: "+alumno.getIdAlumno());
+          System.out.println("DNI: "+alumno.getDni());
+          System.out.println("Apellido: "+alumno.getApellido());
+          System.out.println("Nombre: "+alumno.getNombre());
+          System.out.println("Fecha de Nacimiento: "+alumno.getFechaNac());
+      }
+
+
     }
     
 }
