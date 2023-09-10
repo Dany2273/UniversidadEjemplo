@@ -19,7 +19,7 @@ public class UniversidadEJemplo {
         
         /*Para guardar el Alumno creado en la base de datos debo crear un AlumnoData, que es 
         quien me va a permitir operar con la tabla alumnos*/
-        AlumnoData alu = new AlumnoData();
+//        AlumnoData alu = new AlumnoData();
         
         //alu.guardarAlumno(juan);
         
@@ -49,13 +49,13 @@ public class UniversidadEJemplo {
       /*A la hora de obtener una lista de alumnos, primero creamos un objeto AlumnoData,
          luego recorremos con un FOR la lista de alumnos, y por ultimo dentro del For,
         solicitamos los datos a mostrar*/
-      for(Alumno alumno:alu.listarAlumnos()){
-          System.out.println("ID: "+alumno.getIdAlumno());
-          System.out.println("DNI: "+alumno.getDni());
-          System.out.println("Apellido: "+alumno.getApellido());
-          System.out.println("Nombre: "+alumno.getNombre());
-          System.out.println("Fecha de Nacimiento: "+alumno.getFechaNac());
-      }
+//      for(Alumno alumno:alu.listarAlumnos()){
+//          System.out.println("ID: "+alumno.getIdAlumno());
+//          System.out.println("DNI: "+alumno.getDni());
+//          System.out.println("Apellido: "+alumno.getApellido());
+//          System.out.println("Nombre: "+alumno.getNombre());
+//          System.out.println("Fecha de Nacimiento: "+alumno.getFechaNac());
+//      }
 
 
     }
