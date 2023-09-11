@@ -81,8 +81,8 @@ public class MateriaData {
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             
-            ps.setString(1, materia.getNombre());
-            ps.setInt(2, materia.getIdMateria());
+            ps.setString(2, materia.getNombre());
+            ps.setInt(1, materia.getIdMateria());
             ps.setInt(3, materia.getAñoMateria());
             
             int exito = ps.executeUpdate();
