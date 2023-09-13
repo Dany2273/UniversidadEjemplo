@@ -188,7 +188,31 @@ public class InscripcionData {
     }
 
     public List<Materia> obtenerMateriasNoCursadas(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Materia> materias = new ArrayList<>();
+        
+        String sql =  "SELECT  inscripcion.idMateria,  nombre,  añoMateria  FROM  inscripcion  JOIN  materia"
+                + " ON(inscripcion.idMateria=materia.idMateria) WHERE inscripcion.idAlumno = ?";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            Materia materia;
+            while(rs.next()){
+                materia = new Materia();
+                materia.setIdMateria(rs.getInt("idMateria"));
+                materia.setNombre(rs.getString("nombre"));
+                materia.setAñoMateria(rs.getInt("añoMateria"));
+                materias.add(materia);
+            }
+            
+            ps.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
+        }
+        
+        return materias;
+
     }
 
     public void borrarInscripcionesMateriaAlumno(int idAlumno, int idMateria) {
