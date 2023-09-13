@@ -53,13 +53,13 @@ public class UniversidadEJemplo {
 //       }
 // -----------------------------------------------------------------------------------------------------------
 //      
-//      InscripcionData data = new InscripcionData();
+      InscripcionData data = new InscripcionData();
 //      
-//      for(Materia ins : data.obtenerMateriasCursadas(7)){
+      for(Materia ins : data.obtenerMateriasNoCursadas(7)){
 //          
-//          System.out.println("Materia: "+ins.getNombre());
-//          System.out.println("Año: "+ins.getAñoMateria());
-//      }
+          System.out.println("Materia: "+ins.getNombre());
+          System.out.println("Año: "+ins.getAñoMateria());
+      }
 //
 //----------------------------------------------------------------------------------------------------------------
         
