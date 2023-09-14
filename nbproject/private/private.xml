@@ -3,10 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Compaq/Documents/NetBeansProjects/UniversidadEjemplo/src/vistas/CargaDeNotas.java</file>
-            <file>file:/C:/Users/Compaq/Documents/NetBeansProjects/UniversidadEjemplo/src/accesoADatos/AlumnoData.java</file>
+            <file>file:/C:/Users/Compaq/Documents/NetBeansProjects/UniversidadEjemplo/src/accesoADatos/Conexion.java</file>
             <file>file:/C:/Users/Compaq/Documents/NetBeansProjects/UniversidadEjemplo/src/accesoADatos/InscripcionData.java</file>
             <file>file:/C:/Users/Compaq/Documents/NetBeansProjects/UniversidadEjemplo/src/UniversidadEjemplo/UniversidadEJemplo.java</file>
+            <file>file:/C:/Users/Compaq/Documents/NetBeansProjects/UniversidadEjemplo/src/accesoADatos/MateriaData.java</file>
         </group>
     </open-files>
 </project-private>

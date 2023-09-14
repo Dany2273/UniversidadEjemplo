@@ -83,16 +83,16 @@ public class UniversidadEJemplo {
 //              System.out.println(i.getNota());
 //          }
             
-//            for(Inscripcion i:id.obtenerInscripcionesPorAlumno(7)){
-//                System.out.println(i.getIdInscripcion());
-//                System.out.println(i.getAlum().getApellido());
-//                System.out.println(i.getMat().getNombre());
-//            }
-            
-             for(Alumno a:id.obtenerAlumnosXMateria(8)){
-                System.out.println(a.getNombre());
-                System.out.println(a.getApellido());
-                System.out.println(a.getFechaNac());
+            for(Inscripcion i:id.obtenerInscripcionesPorAlumno(7)){
+                System.out.println(i.getIdInscripcion());
+                System.out.println(i.getAlum().getApellido());
+                System.out.println(i.getMat().getNombre());
             }
+            
+//             for(Alumno a:id.obtenerAlumnosXMateria(8)){
+//                System.out.println(a.getNombre());
+//                System.out.println(a.getApellido());
+//                System.out.println(a.getFechaNac());
+//            }
    }    
 }
