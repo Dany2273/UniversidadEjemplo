@@ -53,18 +53,46 @@ public class UniversidadEJemplo {
 //       }
 // -----------------------------------------------------------------------------------------------------------
 //      
-      InscripcionData data = new InscripcionData();
+//      InscripcionData data = new InscripcionData();
 //      
-      for(Materia ins : data.obtenerMateriasNoCursadas(7)){
+//      for(Materia ins : data.obtenerMateriasNoCursadas(7)){
 //          
-          System.out.println("Materia: "+ins.getNombre());
-          System.out.println("Año: "+ins.getAñoMateria());
-      }
+//          System.out.println("Materia: "+ins.getNombre());
+//          System.out.println("Año: "+ins.getAñoMateria());
+//      }
 //
 //----------------------------------------------------------------------------------------------------------------
         
-        
-        
-    }
-    
+//        AlumnoData ad = new  AlumnoData();
+//        MateriaData md = new MateriaData();
+        InscripcionData id = new InscripcionData();
+//        
+//        Alumno juan = ad.buscarAlumno(3);
+//        Materia mate = md.buscarMateria(12);
+//        Inscripcion insc = new Inscripcion(juan, mate, 7);
+//        
+////        id.guardarInscripcion(insc);
+//
+//        id.actualizarNota(3, 12, 10);
+
+//          id.borrarInscripcionesMateriaAlumno(3, 12);
+
+//          for(Inscripcion i:id.obtenerInscripciones()){
+//              System.out.println(i.getAlum().getApellido());
+//              System.out.println(i.getMat().getNombre());
+//              System.out.println(i.getNota());
+//          }
+            
+//            for(Inscripcion i:id.obtenerInscripcionesPorAlumno(7)){
+//                System.out.println(i.getIdInscripcion());
+//                System.out.println(i.getAlum().getApellido());
+//                System.out.println(i.getMat().getNombre());
+//            }
+            
+             for(Alumno a:id.obtenerAlumnosXMateria(8)){
+                System.out.println(a.getNombre());
+                System.out.println(a.getApellido());
+                System.out.println(a.getFechaNac());
+            }
+   }    
 }

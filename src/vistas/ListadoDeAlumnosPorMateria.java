@@ -35,6 +35,10 @@ public class ListadoDeAlumnosPorMateria extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
+        setTitle("Listado por materias");
+
+        jPanel1.setBackground(new java.awt.Color(0, 82, 94));
+
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Listado de Alumnos por Materia.");
 

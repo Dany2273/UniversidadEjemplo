@@ -46,6 +46,10 @@ public class Materia extends javax.swing.JInternalFrame {
 
         jTextField2.setText("jTextField2");
 
+        setTitle("Gestion de Materias");
+
+        jPanel1.setBackground(new java.awt.Color(0, 82, 94));
+
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel1.setText("Materia.");
 
