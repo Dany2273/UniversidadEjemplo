@@ -27,11 +27,11 @@ public class UniversidadEJemplo {
 //        AlumnoData aData = new AlumnoData();
 //        aData.guardarAlumno(alum);
 // -----------------------------------------------------------------------------------------------------       
-//        MateriaData mData = new MateriaData();
-//        
-//        Materia mat = new Materia("Matematica 2", 1, true);
-//        mData.guardarMateria(mat);
-//        System.out.println(mat.getIdMateria());
+        MateriaData mData = new MateriaData();
+        
+        Materia mat = new Materia("Matematica 3", 1, true);
+        mData.guardarMateria(mat);
+        System.out.println(mat.getIdMateria());
 //        
 //        Inscripcion insc = new Inscripcion(alum, mat, 7);
 //        System.out.println(insc.getAlum().getIdAlumno());
@@ -65,7 +65,7 @@ public class UniversidadEJemplo {
         
 //        AlumnoData ad = new  AlumnoData();
 //        MateriaData md = new MateriaData();
-        InscripcionData id = new InscripcionData();
+//        InscripcionData id = new InscripcionData();
 //        
 //        Alumno juan = ad.buscarAlumno(3);
 //        Materia mate = md.buscarMateria(12);
@@ -83,11 +83,11 @@ public class UniversidadEJemplo {
 //              System.out.println(i.getNota());
 //          }
             
-            for(Inscripcion i:id.obtenerInscripcionesPorAlumno(7)){
-                System.out.println(i.getIdInscripcion());
-                System.out.println(i.getAlum().getApellido());
-                System.out.println(i.getMat().getNombre());
-            }
+//            for(Inscripcion i:id.obtenerInscripcionesPorAlumno(7)){
+//                System.out.println(i.getIdInscripcion());
+//                System.out.println(i.getAlum().getApellido());
+//                System.out.println(i.getMat().getNombre());
+//            }
             
 //             for(Alumno a:id.obtenerAlumnosXMateria(8)){
 //                System.out.println(a.getNombre());
