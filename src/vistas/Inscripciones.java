@@ -10,6 +10,7 @@ import accesoADatos.InscripcionData;
 import accesoADatos.MateriaData;
 import entidades.Alumno;
 import entidades.Inscripcion;
+import entidades.Materia;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
