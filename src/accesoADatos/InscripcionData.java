@@ -89,11 +89,11 @@ public class InscripcionData {
     
     
     
-    public List<Inscripcion> obtenerInscripcionesPorAlumno(int id) {
+      public ArrayList<Inscripcion> obtenerInscripcionesPorAlumno(int id) {
          ArrayList<Inscripcion> inscripciones = new ArrayList<>();
 
         String sql = "SELECT * FROM inscripcion WHERE idAlumno = ?";
-        Inscripcion ins = null;
+      
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -101,7 +101,7 @@ public class InscripcionData {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                ins=new Inscripcion();
+              Inscripcion ins=new Inscripcion();
                 
                 ins.setIdInscripcion(rs.getInt("idInscripto"));            //  _
                 Alumno alu = aluData.buscarAlumno(rs.getInt("idAlumno"));    //   |--->Recupero los datos
@@ -109,9 +109,11 @@ public class InscripcionData {
                 
                 ins.setAlum(alu);                //  -|
                 ins.setMat(mat);                 //  _|--->Seteo alumno y materia
-                ins.setNota(rs.getDouble("nota")); 
+                ins.setNota(rs.getDouble("nota"));
+               ;
                 
                 inscripciones.add(ins);
+               
             }
 
         } catch (SQLException ex) {
