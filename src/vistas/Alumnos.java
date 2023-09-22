@@ -218,7 +218,15 @@ public class Alumnos extends javax.swing.JInternalFrame {
                 jdFecha.getDate().toString().isEmpty()) {
             JOptionPane.showMessageDialog(null, "No debe haber campos vacios.");
             return;
-        } else if (jEstado.isSelected() == false) {
+        }
+   
+        if(!jDni.getText().matches("[0-9]+")){
+            JOptionPane.showMessageDialog(null, "Solo debe ingresar numeros en el campo DNI.");
+            
+            return;
+        }
+       
+        if (jEstado.isSelected() == false) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar el estado del alumno como activo.");
             return;
         }

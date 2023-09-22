@@ -121,44 +121,7 @@ public class InscripcionData {
         }
 
         return inscripciones;
-//        ArrayList<Inscripcion> inscripciones = new ArrayList<>();
-//
-//        String sql = "SELECT idInscripto, idMateria, nota FROM inscripcion WHERE idAlumno = ?";
-//        
-//        Inscripcion ins = null;
-//        Alumno alumno = null;
-//        Materia materia = null;
-//        
-//        try {
-//            PreparedStatement ps = con.prepareStatement(sql);
-//            ps.setInt(1, id);
-//            ResultSet rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//                
-//                alumno=new Alumno();
-//                materia = new Materia();
-//                ins = new Inscripcion();
-//                
-//                aluData = new AlumnoData();
-//                matData = new MateriaData();
-//                
-//                alumno = aluData.buscarAlumno(id);
-//                materia = matData.buscarMateria(rs.getInt("idMateria"));//Aca puede estar el problema
-//                 
-//                ins.setIdInscripcion(rs.getInt("idInscripto"));
-//                ins.setAlum(alumno);
-//                ins.setMat(materia);
-//                ins.setNota(rs.getDouble("nota"));
-//               
-//                inscripciones.add(ins);
-//            }
-//            ps.close();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla inscripcion");
-//        }
-//
-//        return inscripciones;
+
     }
     
     

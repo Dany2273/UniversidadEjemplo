@@ -18,6 +18,9 @@ public class UniversidadEJemplo {
 
 
     public static void main(String[] args) {
+        MenuPrincipal menu = new MenuPrincipal();
+        menu.setVisible(true);
+        
         // TODO code application logic here
 //        Connection con = Conexion.getConexion();//--->Llamamos al metodo de la clase para establecer la conexion
         
