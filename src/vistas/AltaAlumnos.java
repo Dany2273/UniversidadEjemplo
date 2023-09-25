@@ -21,6 +21,7 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
 
     public AltaAlumnos() {
         initComponents();
+        llenarCombo();
     }
 
     /**
