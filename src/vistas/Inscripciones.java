@@ -11,6 +11,9 @@ import accesoADatos.MateriaData;
 import entidades.Alumno;
 import entidades.Inscripcion;
 import entidades.Materia;
+import java.awt.Graphics;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -51,7 +54,13 @@ Alumno al = new Alumno();
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel(){
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Iconos/resumen-degradado-negro-lujo-fondo-negro-vignette-backgr.jpg"));
+            Image image = icon.getImage();
+            public void paintComponent(Graphics g){
+                g.drawImage(image,0,0,getWidth(),getHeight(),this);
+            }
+        };
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jcCombo = new javax.swing.JComboBox<>();
@@ -68,10 +77,14 @@ Alumno al = new Alumno();
 
         jPanel1.setBackground(new java.awt.Color(0, 82, 94));
 
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Formulario de Inscripcion.");
 
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Seleccione un Alumno: ");
 
         jcCombo.addItemListener(new java.awt.event.ItemListener() {
@@ -85,7 +98,9 @@ Alumno al = new Alumno();
             }
         });
 
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Listado de Materias.");
 
         jTabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -101,6 +116,8 @@ Alumno al = new Alumno();
         ));
         jScrollPane1.setViewportView(jTabla);
 
+        jrInscriptas.setBackground(new java.awt.Color(255, 255, 255));
+        jrInscriptas.setForeground(new java.awt.Color(255, 255, 255));
         jrInscriptas.setText("Materias Inscriptas");
         jrInscriptas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,6 +125,8 @@ Alumno al = new Alumno();
             }
         });
 
+        jrNoInscriptas.setBackground(new java.awt.Color(255, 255, 255));
+        jrNoInscriptas.setForeground(new java.awt.Color(255, 255, 255));
         jrNoInscriptas.setText("Materias no Inscriptas");
         jrNoInscriptas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
