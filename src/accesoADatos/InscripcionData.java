@@ -168,7 +168,7 @@ public class InscripcionData {
             Alumno alumno;
             while(rs.next()){
                 alumno=new Alumno();
-                
+                alumno.setDni(rs.getInt("dni"));
                 alumno.setIdAlumno(rs.getInt("idAlumno"));
                 alumno.setNombre(rs.getString("nombre"));
                 alumno.setApellido(rs.getString("apellido"));
