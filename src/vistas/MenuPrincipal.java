@@ -6,6 +6,8 @@
 package vistas;
 
 import entidades.Materia;
+import java.awt.Graphics;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 
 /**
@@ -33,12 +35,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        Escritorio = new javax.swing.JDesktopPane();
+        Escritorio = new javax.swing.JDesktopPane(){
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Iconos/Image20230925113136.jpg"));
+            Image image = icon.getImage();
+            public void paintComponent(Graphics g){
+                g.drawImage(image,0,0,getWidth(),getHeight(),this);
+            }
+        };
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
@@ -56,11 +63,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         Escritorio.setLayout(EscritorioLayout);
         EscritorioLayout.setHorizontalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 827, Short.MAX_VALUE)
+            .addGap(0, 1045, Short.MAX_VALUE)
         );
         EscritorioLayout.setVerticalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 490, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -71,7 +78,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Escritorio)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(Escritorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Alumno");
@@ -84,21 +93,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem1);
 
-        jMenuItem6.setText("Baja Alumno");
+        jMenuItem6.setText("Manejo de Datos");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
             }
         });
         jMenu1.add(jMenuItem6);
-
-        jMenuItem7.setText("Modificar Alumno");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem7);
 
         jMenuBar1.add(jMenu1);
 
@@ -185,7 +186,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         Escritorio.removeAll();
         Escritorio.repaint();
-        Alumnos alu = new Alumnos();
+        AltaAlumnos alu = new AltaAlumnos();
         alu.setVisible(true);
         Escritorio.add(alu);
         Escritorio.moveToFront(alu);
@@ -235,20 +236,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         Escritorio.removeAll();
         Escritorio.repaint();
-        BajaAlumno alu = new BajaAlumno();
+        ManejoDeDatos alu = new ManejoDeDatos();
         alu.setVisible(true);
         Escritorio.add(alu);
         Escritorio.moveToFront(alu);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
-
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-               Escritorio.removeAll();
-        Escritorio.repaint();
-        ModificarAlumno alu = new ModificarAlumno();
-        alu.setVisible(true);
-        Escritorio.add(alu);
-        Escritorio.moveToFront(alu);
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
@@ -319,7 +311,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;

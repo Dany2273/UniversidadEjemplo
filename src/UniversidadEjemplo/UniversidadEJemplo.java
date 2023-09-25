@@ -1,16 +1,8 @@
 
 package UniversidadEjemplo;
 
-import accesoADatos.AlumnoData;
-import accesoADatos.Conexion;
-import accesoADatos.InscripcionData;
 import accesoADatos.MateriaData;
-import entidades.Alumno;
-import entidades.Inscripcion;
 import entidades.Materia;
-import java.sql.Connection;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import vistas.MenuPrincipal;
 
 
