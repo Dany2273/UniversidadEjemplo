@@ -64,8 +64,8 @@ public class AlumnoData {
     }
 
     public Alumno buscarAlumno(int id) {//En este caso buscamos un alumno solo por el ID
-        String sql = "SELECT dni, apellido, nombre, fechaNacimiento"
-                + " FROM alumno WHERE idAlumno = ? AND estado = 1";
+        String sql = "SELECT dni, apellido, nombre, fechaNacimiento, estado"
+                + " FROM alumno WHERE idAlumno = ? ";
         
         Alumno alumno = null;//Utilizo una variable alumno para poder mostrar los datos
         
@@ -86,7 +86,7 @@ public class AlumnoData {
                alumno.setApellido(rs.getString("apellido"));
                alumno.setNombre(rs.getString("nombre"));
                alumno.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
-               alumno.setEstado(true);
+               alumno.setEstado(rs.getBoolean("estado"));
             }else{
                 JOptionPane.showMessageDialog(null, "No existe ese Alumno");
             }
@@ -101,7 +101,7 @@ public class AlumnoData {
     public Alumno buscarAlumnoPorDni(int dni) {
         
         String sql = "SELECT idAlumno, dni, apellido, nombre, fechaNacimiento, estado "
-                + "FROM alumno WHERE dni = ? AND estado = 1";
+                + "FROM alumno WHERE dni = ? ";
         Alumno alumno = null;
         try {
             PreparedStatement ps = con.prepareStatement(sql); 
@@ -115,7 +115,7 @@ public class AlumnoData {
                alumno.setApellido(rs.getString("apellido"));
                alumno.setNombre(rs.getString("nombre"));
                alumno.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
-               alumno.setEstado(true);
+               alumno.setEstado(rs.getBoolean("estado"));
             }else{
                 JOptionPane.showMessageDialog(null, "No existe ese Alumno");
             }
@@ -130,7 +130,7 @@ public class AlumnoData {
     
     public List<Alumno> listarAlumnos() {//Metodo que devuelve una lista de alumnos
         List<Alumno> alumnos = new ArrayList<>();
-        String sql = "SELECT idAlumno, dni, apellido, nombre, fechaNacimiento FROM alumno WHERE estado = 1 ";
+        String sql = "SELECT idAlumno, dni, apellido, nombre, fechaNacimiento, estado FROM alumno  ";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -145,7 +145,7 @@ public class AlumnoData {
                alumno.setApellido(rs.getString("apellido"));
                alumno.setNombre(rs.getString("nombre"));
                alumno.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
-               alumno.setEstado(true);
+               alumno.setEstado(rs.getBoolean("estado"));
                 
                alumnos.add(alumno);//En cada vuelta del While va a ir agregando un alumno
                

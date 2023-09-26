@@ -111,7 +111,7 @@ public class ListadoDeAlumnosPorMateria extends javax.swing.JInternalFrame {
                         .addComponent(jLabel2)
                         .addGap(40, 40, 40)
                         .addComponent(jcCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1))

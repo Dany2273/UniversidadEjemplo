@@ -10,15 +10,11 @@ import entidades.Alumno;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -31,8 +27,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     AlumnoData aData = new AlumnoData();
     Alumno al = new Alumno();
-    
-     private DefaultTableModel modelo = new DefaultTableModel() {
+
+    private DefaultTableModel modelo = new DefaultTableModel() {
 
         public boolean isCellEditable(int f, int c) {
             return false;
@@ -100,7 +96,6 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         jrNoActivos = new javax.swing.JRadioButton();
         jtBuscar = new javax.swing.JTextField();
         jbSalir = new javax.swing.JButton();
-        jbSeleccionar = new javax.swing.JButton();
 
         setTitle("Manejo de Datos");
         setMinimumSize(new java.awt.Dimension(25, 22));
@@ -240,13 +235,6 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
             }
         });
 
-        jbSeleccionar.setText("Seleccionar Alumno");
-        jbSeleccionar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSeleccionarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -273,7 +261,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                                         .addComponent(jCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(28, 28, 28)
                                         .addComponent(jtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jrActivos)
@@ -289,17 +277,15 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                                         .addComponent(jdFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jbSeleccionar)
-                        .addGap(88, 88, 88)
+                        .addGap(42, 42, 42)
                         .addComponent(jbBorrar)
-                        .addGap(98, 98, 98)
+                        .addGap(167, 167, 167)
                         .addComponent(jbModificar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jbEliminar)
-                        .addGap(92, 92, 92)
+                        .addGap(156, 156, 156)
                         .addComponent(jbSalir)
-                        .addGap(35, 35, 35))))
+                        .addGap(44, 44, 44))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(288, 288, 288)
                 .addComponent(jLabel1)
@@ -337,8 +323,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                     .addComponent(jbBorrar)
                     .addComponent(jbModificar)
                     .addComponent(jbEliminar)
-                    .addComponent(jbSalir)
-                    .addComponent(jbSeleccionar))
+                    .addComponent(jbSalir))
                 .addGap(30, 30, 30))
         );
 
@@ -370,64 +355,126 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     private void jTablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablaMouseClicked
         // TODO add your handling code here:
+         try {
+            int fila = jTabla.getSelectedRow();//Declaro la varible fila
+            jtNombre.setText((String) modelo.getValueAt(fila, 0));
+            jtApellido.setText((String) modelo.getValueAt(fila, 1));
+            jtDni.setText((String) modelo.getValueAt(fila, 2).toString());
+            /*Para mostrar la fecha de la tabla, primero recupero el dato a String
+            y despues hago la transformacion de String a Date que es el formato del jDChooser*/
+            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+            String fecha = modelo.getValueAt(fila, 3).toString().trim();
+            Date dato = null;
+            dato = formatoDelTexto.parse(fecha);
+            jdFecha.setDate(dato);
+            jtBuscar.setText("");
+        } catch (ArrayIndexOutOfBoundsException ai) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un Alumno de la tabla.", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_jTablaMouseClicked
 
     private void jbBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBorrarActionPerformed
         // TODO add your handling code here
-        borrar();
+
         borrarFilas();
+        borrar();
     }//GEN-LAST:event_jbBorrarActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
         // TODO add your handling code here:
 
-        if (jtNombre.getText().equals("") && jtApellido.getText().equals("")&& jtDni.getText().equals("") && jdFecha.getDate() == null) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un Alumno de la tabla.", "Error!", JOptionPane.ERROR_MESSAGE);
+        if (jtNombre.getText().equals("") && jtApellido.getText().equals("")
+                && jtDni.getText().equals("") && jdFecha.getDate() == null) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Por favor, complete todos los campos obligatorios:\n- Nombre\n- Apellido\n- DNI\n- Fecha de Nacimiento",
+                    "Campos Incompletos, seleccione un Alumno de la lista",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
             return;
-        }
-        if (jtNombre.getText().equals("") || jtApellido.getText().equals("")|| jtDni.getText().equals("") || jdFecha.getDate() == null) {
-            JOptionPane.showMessageDialog(null, "Faltan campos por completar.", "Error!", JOptionPane.ERROR_MESSAGE);
+        } else if (jtApellido.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "El campo Apellido se encuentra vacio!!.", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (jtDni.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "El campo DNI se encuentra vacio!!.", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (jtNombre.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "El campo Apellido se encuentra vacio!!.", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (jdFecha.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "El campo Fecha se encuentra vacio!!.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (!jtNombre.getText().matches("^[\\p{L} ]+$")) {
-            JOptionPane.showMessageDialog(null, "Error al ingresar el Nombre.", "Error!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese un Nombre válido! (solo letras y espacios).", "Error en el Nombre", JOptionPane.ERROR_MESSAGE);
+
             return;
         }
         if (!jtApellido.getText().matches("^[\\p{L} ]+$")) {
-            JOptionPane.showMessageDialog(null, "Error al ingresar el Apellido.", "Error!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese un Apellido válido! (solo letras y espacios).", "Error en el Apellido", JOptionPane.ERROR_MESSAGE);
+
             return;
         }
         if (!jtDni.getText().matches("[0-9]+")) {
-            JOptionPane.showMessageDialog(null, "Error al ingresar DNI.", "Error!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese un DNI válido! (solo números).", "Error en el DNI", JOptionPane.ERROR_MESSAGE);
+
             return;
         }
-        int resp = JOptionPane.showConfirmDialog(null, "¿Desea guardar los datos ingresados?", "Atención!",
-            JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-        if (resp == 0) {
+        // Obtengo los valores actuales del alumno.
+        al = aData.buscarAlumnoPorDni((int) modelo.getValueAt(jTabla.getSelectedRow(), 2));
 
-            al.setNombre(jtNombre.getText());
-            al.setApellido(jtApellido.getText());
-            al.setDni(Integer.parseInt(jtDni.getText()));
-            al.setFechaNac(jdFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+// Obtengo los nuevos valores ingresados por el usuario.
+        String nuevoNombre = jtNombre.getText();
+        String nuevoApellido = jtApellido.getText();
+        int nuevoDni = Integer.parseInt(jtDni.getText());
+        LocalDate nuevaFechaNacimiento = jdFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-            aData.modificarAlumno(al);
-            System.out.println(al);
-            borrar();
-            borrarFilas();
+// Comparo los valores actuales con los nuevos valores.
+        if (al.getNombre().equals(nuevoNombre)
+                && al.getApellido().equals(nuevoApellido)
+                && al.getDni() == nuevoDni
+                && al.getFechaNac().equals(nuevaFechaNacimiento)) {
+            // No se realizaron cambios, muestra un mensaje de advertencia.
+            JOptionPane.showMessageDialog(
+                    null,
+                    "No se realizaron cambios en los datos del alumno.",
+                    "Sin Cambios",
+                    JOptionPane.WARNING_MESSAGE
+            );
+        } else {
+            int resp = JOptionPane.showConfirmDialog(null, "¿Desea guardar los datos ingresados?", "Atención!",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+            if (resp == 0) {
+
+                al.setNombre(jtNombre.getText());
+                al.setApellido(jtApellido.getText());
+                al.setDni(Integer.parseInt(jtDni.getText()));
+                al.setFechaNac(jdFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+                aData.modificarAlumno(al);
+                System.out.println(al);
+                borrar();
+                borrarFilas();
+            }
         }
     }//GEN-LAST:event_jbModificarActionPerformed
 
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
         // TODO add your handling code here:
-        if (jtNombre.getText().equals("") && jtApellido.getText().equals("")&& jtDni.getText().equals("") && jdFecha.getDate() == null) {
+        if (jtNombre.getText().equals("") && jtApellido.getText().equals("") && jtDni.getText().equals("") && jdFecha.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un Alumno de la tabla.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int resp = JOptionPane.showConfirmDialog(null, "¿Desea dar de baja al Alumno seleccionado?", "Atención!",
-            JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         int fila = jTabla.getSelectedRow();
-        if(resp==0){
+        if (resp == 0) {
             al = aData.buscarAlumnoPorDni((int) modelo.getValueAt(fila, 2));
             aData.eliminarAlumno(al.getIdAlumno());
 
@@ -460,7 +507,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
             jtBuscar.setText("Ingrese Apellido");
             borrarFilas();
 
-        } else if(jCombo.getSelectedItem().equals("Todos")){
+        } else if (jCombo.getSelectedItem().equals("Todos")) {
             activar();
             borrarFilas();
             for (Alumno alu : aData.listarAlumnos()) {
@@ -469,10 +516,13 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 });
             }
 
-        }else if(jCombo.getSelectedIndex()==0&&modelo.getRowCount() > 0){
-            bloquear();
+        } else if (jCombo.getSelectedIndex() == 0 ) {
+            
+             borrarFilas();
             borrar();
-            borrarFilas();
+           bloquear();
+            
+            
         }
     }//GEN-LAST:event_jComboActionPerformed
 
@@ -578,31 +628,6 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_jbSalirActionPerformed
 
-    private void jbSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSeleccionarActionPerformed
-        // TODO add your handling code here:
-
-        try{
-            int fila = jTabla.getSelectedRow();//Declaro la varible fila
-            jtNombre.setText((String) modelo.getValueAt(fila, 0));
-            jtApellido.setText((String) modelo.getValueAt(fila, 1));
-            jtDni.setText((String) modelo.getValueAt(fila, 2).toString());
-            /*Para mostrar la fecha de la tabla, primero recupero el dato a String
-            y despues hago la transformacion de String a Date que es el formato del jDChooser*/
-            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-            String fecha = modelo.getValueAt(fila, 3).toString().trim();
-            Date dato = null;
-            dato = formatoDelTexto.parse(fecha);
-            jdFecha.setDate(dato);
-            jtBuscar.setText("");
-        }catch(ArrayIndexOutOfBoundsException ai){
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un Alumno de la tabla.", "Error!", JOptionPane.ERROR_MESSAGE);
-            return;
-        }catch (ParseException ex) {
-            ex.printStackTrace();
-        }
-
-    }//GEN-LAST:event_jbSeleccionarActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jCombo;
@@ -619,7 +644,6 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbEliminar;
     private javax.swing.JButton jbModificar;
     private javax.swing.JButton jbSalir;
-    private javax.swing.JButton jbSeleccionar;
     private com.toedter.calendar.JDateChooser jdFecha;
     private javax.swing.JRadioButton jrActivos;
     private javax.swing.JRadioButton jrNoActivos;
@@ -637,14 +661,16 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         jCombo.addItem("Todos");
     }
 
-     private void borrar() {
+    private void borrar() {
         jtDni.setText("");
         jtApellido.setText("");
         jtNombre.setText("");
         jCombo.setSelectedItem("");
+        jtBuscar.setText("");
         jdFecha.setDate(null);
-        
+
     }
+
     private void armarCabecera() {
         modelo.addColumn("Nombre");
         modelo.addColumn("Apellido");
@@ -656,24 +682,25 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
     }
 
     private void borrarFilas() {
-        int f = jTabla.getRowCount() - 1;
-        for (; f >= 0; f--) {
-            modelo.removeRow(f);
+        int f = modelo.getRowCount();
+        for (int i = f - 1; i >= 0; i--) {
+            modelo.removeRow(i);
         }
     }
 
-    private void bloquear(){
-        jrActivos.setEnabled(false);jrNoActivos.setEnabled(false);
-        jtNombre.setEnabled(false);jtApellido.setEnabled(false);jtDni.setEnabled(false);
-        jdFecha.setEnabled(false);jTabla.setEnabled(false);jtBuscar.setEnabled(false);
-        jbBorrar.setEnabled(false);jbModificar.setEnabled(false);
-        jbEliminar.setEnabled(false);jbSeleccionar.setEnabled(false);
+    private void bloquear() {
+        jrActivos.setEnabled(false);jrNoActivos.setEnabled(false);jtNombre.setEnabled(false);
+        jtApellido.setEnabled(false);jtDni.setEnabled(false);jdFecha.setEnabled(false);
+        jTabla.setEnabled(false);jtBuscar.setEnabled(false);jbBorrar.setEnabled(false);
+        jbModificar.setEnabled(false);jbEliminar.setEnabled(false);
+        
     }
-    private void activar(){
-        jrActivos.setEnabled(true);jrNoActivos.setEnabled(true);
-        jtNombre.setEnabled(true);jtApellido.setEnabled(true);jtDni.setEnabled(true);
-        jdFecha.setEnabled(true);jTabla.setEnabled(true);jtBuscar.setEnabled(true);
-        jbBorrar.setEnabled(true);jbModificar.setEnabled(true);
-        jbEliminar.setEnabled(true);jbSeleccionar.setEnabled(true);
+
+    private void activar() {
+        jrActivos.setEnabled(true); jrNoActivos.setEnabled(true);jtNombre.setEnabled(true);
+        jtApellido.setEnabled(true); jtDni.setEnabled(true); jdFecha.setEnabled(true);
+        jTabla.setEnabled(true);jtBuscar.setEnabled(true);jbBorrar.setEnabled(true);
+        jbModificar.setEnabled(true); jbEliminar.setEnabled(true);
+        
     }
 }

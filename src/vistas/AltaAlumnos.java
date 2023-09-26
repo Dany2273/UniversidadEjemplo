@@ -263,20 +263,43 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
 
-        if (jNombre.getText().equals("") || jApellido.getText().equals("")|| jDni.getText().equals("") || jdFecha.getDate() == null) {
-            JOptionPane.showMessageDialog(null, "Faltan campos por completar.", "Error!", JOptionPane.ERROR_MESSAGE);
+        if (jNombre.getText().equals("") && jApellido.getText().equals("") &&
+                jDni.getText().equals("") && jdFecha.getDate() == null) {
+           JOptionPane.showMessageDialog(
+    null,
+    "Por favor, complete todos los campos obligatorios:\n- Nombre\n- Apellido\n- DNI\n- Fecha de Nacimiento\n- Estado",
+    "Campos Incompletos",
+    JOptionPane.ERROR_MESSAGE
+);
+
+            return;
+        }else if(jApellido.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "El campo Apellido se encuentra vacio!!.", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }else if(jDni.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "El campo DNI se encuentra vacio!!.", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }else if(jNombre.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "El campo Apellido se encuentra vacio!!.", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }else if( jdFecha.getDate() == null){
+            JOptionPane.showMessageDialog(null, "El campo Fecha se encuentra vacio!!.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
         if (!jNombre.getText().matches("^[\\p{L} ]+$")) {
-            JOptionPane.showMessageDialog(null, "Error al ingresar el Nombre.", "Error!", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "Ingrese un Nombre válido! (solo letras y espacios).", "Error en el Nombre", JOptionPane.ERROR_MESSAGE);
+
             return;
         }
         if (!jApellido.getText().matches("^[\\p{L} ]+$")) {
-            JOptionPane.showMessageDialog(null, "Error al ingresar el Apellido.", "Error!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese un Apellido válido! (solo letras y espacios).", "Error en el Apellido", JOptionPane.ERROR_MESSAGE);
+
             return;
         }
         if (!jDni.getText().matches("[0-9]+")) {
-            JOptionPane.showMessageDialog(null, "Error al ingresar DNI.", "Error!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese un DNI válido! (solo números).", "Error en el DNI", JOptionPane.ERROR_MESSAGE);
+
             return;
         }
 
