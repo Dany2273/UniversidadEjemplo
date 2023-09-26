@@ -15,6 +15,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -39,6 +40,7 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
         initComponents();
         armarCabecera();
         cargarCombo();
+        bloquear();
     }
 
     /**
@@ -105,6 +107,11 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jtTabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtTablaMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(jtTabla);
@@ -212,19 +219,43 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGuardarActionPerformed
-        int idAlumno = al.getIdAlumno(); 
-        int idMateria = Integer.parseInt(jTF_idM.getText());
-        double nuevaNota = Double.parseDouble(JTF_agreNot.getText()); 
+        int idAlumno = al.getIdAlumno();
+        String idMateriaStr = jTF_idM.getText();
+        String nuevaNotaStr = JTF_agreNot.getText();
 
+        if (idMateriaStr.isEmpty() || nuevaNotaStr.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe completar todos los campos antes de guardar.");
+            return;
+        }
+
+        int idMateria;
+
+        try {
+            idMateria = Integer.parseInt(idMateriaStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de la materia debe ser un número válido.");
+            return;
+        }
+
+        double nuevaNota;
+
+        try {
+            nuevaNota = Double.parseDouble(nuevaNotaStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "La nota debe ser un número válido.");
+            return;
+        }
+
+        
 
         iData.actualizarNota(idAlumno, idMateria, nuevaNota);
 
- 
         jTF_idM.setText("");
         JTF_agreNot.setText("");
-    
-     JCBAlumnoActionPerformed(evt);
+        borrarFilas();
+        JCBAlumno.setSelectedIndex(0);
 
+        JCBAlumnoActionPerformed(evt);
     }//GEN-LAST:event_jGuardarActionPerformed
 
     private void JSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JSalirActionPerformed
@@ -232,31 +263,47 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JSalirActionPerformed
 
     private void JCBAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBAlumnoActionPerformed
-       al = (Alumno) JCBAlumno.getSelectedItem();
-        System.out.println(al.toString());
-
-        ArrayList<Inscripcion> inscripciones = iData.obtenerInscripcionesPorAlumno(al.getIdAlumno());
-        DefaultTableModel modelo = (DefaultTableModel) jtTabla.getModel();
-        modelo.setRowCount(0);
-
-        for (Inscripcion i : inscripciones) {
-            modelo.addRow(new Object[]{
-                i.getMat().getIdMateria(),
-                i.getMat().getNombre(),
-                i.getNota()
-
-            });
+      if (JCBAlumno.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un alumno");
+          
+            return;
         }
+     
+
+            al = (Alumno) JCBAlumno.getSelectedItem();
+            activar();
+       
+
+            ArrayList<Inscripcion> inscripciones = iData.obtenerInscripcionesPorAlumno(al.getIdAlumno());
+            DefaultTableModel modelo = (DefaultTableModel) jtTabla.getModel();
+            modelo.setRowCount(0);
+
+            for (Inscripcion i : inscripciones) {
+                modelo.addRow(new Object[]{
+                    i.getMat().getIdMateria(),
+                    i.getMat().getNombre(),
+                    i.getNota()
+
+                });
+            }
+       
+                   
     }//GEN-LAST:event_JCBAlumnoActionPerformed
 
-
-    
-   
-
-     
-                                      
-  
+    private void jtTablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMouseClicked
+          try {
+            int fila= jtTabla.getSelectedRow();
        
+           String Mat = ((String) modelo.getValueAt(fila,0).toString());
+         jTF_idM.setText(Mat);
+           
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            
+        }
+    }//GEN-LAST:event_jtTablaMouseClicked
+
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -282,6 +329,30 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
 
         }
 
+    }
+ private void bloquear() {
+       
+        jGuardar.setEnabled(false);
+        jTF_idM.setEnabled(false);
+        JTF_agreNot.setEnabled(false);
+        jtTabla.setEnabled(false);
+    }
+
+    private void activar() {
+   
+        jGuardar.setEnabled(true);
+        jTF_idM.setEnabled(true);
+        JTF_agreNot.setEnabled(true);
+        jtTabla.setEnabled(true);
+    }
+
+
+
+    private void borrarFilas() {
+        int f = jtTabla.getRowCount() - 1;
+        for (; f >= 0; f--) {
+            modelo.removeRow(f);
+        }
     }
 
     public void armarCabecera() {
