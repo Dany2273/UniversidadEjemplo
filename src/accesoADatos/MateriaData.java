@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class MateriaData {
@@ -78,14 +76,15 @@ Materia materia = null;
     }
 
     public void modificarMateria(Materia materia) {
-        String sql = "UPDATE materia SET nombre = ? ,añoMateria = ? WHERE idMateria = ? ";
+        String sql = "UPDATE materia SET nombre = ? ,añoMateria = ?, estado=? WHERE idMateria = ? ";
 
         try {
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setString(2, materia.getNombre());
-            ps.setInt(1, materia.getIdMateria());
-            ps.setInt(3, materia.getAñoMateria());
+            ps.setString(1, materia.getNombre());
+            ps.setInt(4, materia.getIdMateria());
+            ps.setInt(2, materia.getAñoMateria());
+            ps.setBoolean(3, materia.isActivo());
 
             int exito = ps.executeUpdate();
 
@@ -134,6 +133,62 @@ Materia materia = null;
                 materia.setAñoMateria(rs.getInt("añoMateria"));
                 materia.setActivo(true);
 
+                materias.add(materia);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
+        }
+        return materias;
+    }
+    public List<Materia> listarMateriasf() {
+        ArrayList<Materia> materias = new ArrayList<>();
+
+        String sql = "SELECT idMateria, nombre, añoMateria FROM materia WHERE estado = 0";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Materia materia = new Materia();
+
+                materia.setIdMateria(rs.getInt("idMateria"));
+                materia.setNombre(rs.getString("nombre"));
+                materia.setAñoMateria(rs.getInt("añoMateria"));
+                materia.setActivo(false);
+
+                materias.add(materia);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia");
+        }
+        return materias;
+    }
+    public List<Materia> listarMateriast() {
+        ArrayList<Materia> materias = new ArrayList<>();
+
+        String sql = "SELECT idMateria, nombre, añoMateria, estado FROM materia ";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Materia materia = new Materia();
+
+                materia.setIdMateria(rs.getInt("idMateria"));
+                materia.setNombre(rs.getString("nombre"));
+                materia.setAñoMateria(rs.getInt("añoMateria"));
+                materia.setActivo(rs.getBoolean("estado"));
+                
+//                if (materia.isActivo()==true) {
+//                    materia.setActivo(true);
+//                }
+//                else{
+//                    materia.setActivo(false);
+//                }
                 materias.add(materia);
             }
 
