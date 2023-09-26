@@ -11,7 +11,7 @@ import accesoADatos.AlumnoData;
 import accesoADatos.InscripcionData;
 import entidades.Alumno;
 import entidades.Inscripcion;
-import java.awt.Graphics;
+import java.awt.Graphics; 
 import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
@@ -223,6 +223,9 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
         String idMateriaStr = jTF_idM.getText();
         String nuevaNotaStr = JTF_agreNot.getText();
 
+        
+        
+        
         if (idMateriaStr.isEmpty() || nuevaNotaStr.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe completar todos los campos antes de guardar.");
             return;
@@ -253,9 +256,9 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
         jTF_idM.setText("");
         JTF_agreNot.setText("");
         borrarFilas();
-        JCBAlumno.setSelectedIndex(0);
+  
 
-        JCBAlumnoActionPerformed(evt);
+
     }//GEN-LAST:event_jGuardarActionPerformed
 
     private void JSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JSalirActionPerformed
