@@ -212,4 +212,29 @@ public class AlumnoData {
         }
         
     }
+    
+     public void reinscribirAlumno(int id) {
+      
+        String sql = "UPDATE alumno SET estado = 1 WHERE idAlumno = ? AND estado = 0;";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            ps.setInt(1, id);
+            
+           int exito = ps.executeUpdate();//Como la sentencia devuelve un entero creamos una variable tipo Int
+            
+            if(exito==1){
+                
+                JOptionPane.showMessageDialog(null, "Alumno reinscripto con exito.");
+                
+                /*Guardamos los cambios y ejecutamos desde el main*/
+                
+            }
+            
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno");
+        }
+    }
+    
 }
