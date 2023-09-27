@@ -443,15 +443,17 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
 
         if (jCombo1.getSelectedItem().equals("Nuevo Alumno")) {
-            jbGuardar.setEnabled(true);
-            jbReinscribir.setEnabled(false);
-            jTabla.setEnabled(false);
+            jNombre.setEnabled(true);jApellido.setEnabled(true);
+            jbGuardar.setEnabled(true);jDni.setEnabled(true);jdFecha.setEnabled(true);
+            jbReinscribir.setEnabled(false);jTabla.setEnabled(false);
+            borrar();
             borrarFilas();
 
         } else if (jCombo1.getSelectedItem().equals("Reinscribir Alumno")) {
             jbReinscribir.setEnabled(true);jNombre.setEditable(false);jApellido.setEditable(false);
             jbGuardar.setEnabled(false);jDni.setEditable(false);jdFecha.setEnabled(false);
             jTabla.setEnabled(true);
+            borrar();
             borrarFilas();
             for (Alumno alu : aData.listarAlumnos()) {
 
@@ -463,6 +465,10 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
                 }
             }
         } else if (jCombo1.getSelectedItem().equals("Seleccione Accion")) {
+            jbReinscribir.setEnabled(false);jNombre.setEnabled(false);jApellido.setEnabled(false);
+            jbGuardar.setEnabled(false);jDni.setEnabled(false);jdFecha.setEnabled(false);
+            jTabla.setEnabled(false);
+            borrar();
             borrarFilas();
         }
 
