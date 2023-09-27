@@ -307,33 +307,25 @@ Alumno al = new Alumno();
     }//GEN-LAST:event_jrNoInscriptasActionPerformed
 
     private void jBInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBInscribirActionPerformed
-        // TODO add your handling code here:
-        if (jTabla.getSelectedRow() != (-1)) {//-----> la condicion es que si la fila seleccionada es distinta al indice -1
-            // continua con la inscripcion
-            int fila = jTabla.getSelectedRow();//-----> asigno a la variable la fila seleccionada
+       int[] filasSeleccionadas = jTabla.getSelectedRows(); // Obtener todas las filas seleccionadas
 
-            al = (Alumno) jcCombo.getSelectedItem(); //-----> variable al pertenece a Alumno, que recibe y castea el objeto
-            // seleccionado del comboBox
+    if (filasSeleccionadas.length > 0) {
+        al = (Alumno) jcCombo.getSelectedItem();
 
-            int id = (int) modelo.getValueAt(fila, 0);//-----> asigno a la variable id los datos de la fila y el numero de la columna que es 0
-            String nom = (String) modelo.getValueAt(fila, 1);//-----> lo mismo con la columna 1
-            int año = (int) modelo.getValueAt(fila, 2);//-----> y acá con la columna 2
-            Double nota = 0.0;//----->en mi caso decidi que cada inscripcion comience con una nota en 0
+        for (int fila : filasSeleccionadas) {
+            int id = (int) modelo.getValueAt(fila, 0);
+            String nom = (String) modelo.getValueAt(fila, 1);
+            int año = (int) modelo.getValueAt(fila, 2);
+            Double nota = 0.0;
 
-            entidades.Materia mat = new entidades.Materia(id, nom, año, true);//----->creo un objeto Materia y le asigno al constructor
-            // los datos obtenidos de la tabla
-            ins = new Inscripcion(al, mat, nota);//----->creo una nueva inscripcion con los objetos Alumno y Materia con la nota en 0
-            iData.guardarInscripcion(ins);//----->con la varible llamo al metodo guardarInscripcion(), y le paso la inscripcion creada
-
-            modelo.removeRow(fila);//----->una vez creada la inscripcion, remuevo la fila que contenia los datos
-
-        } else {
-
-            JOptionPane.showMessageDialog(null, "Debe seleccionar una materia");
-            return;
+            entidades.Materia mat = new entidades.Materia(id, nom, año, true);
+            ins = new Inscripcion(al, mat, nota);
+            iData.guardarInscripcion(ins);
+             modelo.removeRow(fila);
         }
-
-
+    } else {
+        JOptionPane.showMessageDialog(null, "Debe seleccionar al menos una materia");
+    }
     }//GEN-LAST:event_jBInscribirActionPerformed
 
     private void jBAnularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAnularActionPerformed

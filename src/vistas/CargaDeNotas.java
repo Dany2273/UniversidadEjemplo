@@ -255,6 +255,7 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
 
         jTF_idM.setText("");
         JTF_agreNot.setText("");
+        JCBAlumno.setSelectedItem(null);
         borrarFilas();
   
 
