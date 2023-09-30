@@ -455,7 +455,7 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
             jTabla.setEnabled(true);
             borrar();
             borrarFilas();
-            for (Alumno alu : aData.listarAlumnos()) {
+            for (Alumno alu : aData.listarTodosAlumnos()) {
 
                 if (alu.isEstado() == false) {
                     String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";

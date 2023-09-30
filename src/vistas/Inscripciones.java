@@ -373,7 +373,7 @@ Alumno al = new Alumno();
      private void cargarCombo() {
 
         jcCombo.addItem(null);
-        for (Alumno alu : aData.listarAlumnos()) {
+        for (Alumno alu : aData.listarTodosAlumnos()) {
             jcCombo.addItem(alu);
 
         }

@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vistas;
 
 import accesoADatos.AlumnoData;
 import entidades.Alumno;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.text.ParseException;
@@ -15,11 +9,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -36,22 +30,6 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
     };
 
     private TableRowSorter<DefaultTableModel> sorte = new TableRowSorter<>(modelo);
-
-    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
-        public Component getTableCellRendererComponent(
-                JTable tabla, Object value, boolean isSelected,
-                boolean hasFocus, int row, int column) {
-            if (value instanceof Boolean) {
-                boolean estado = (boolean) value;
-                if (estado) {
-                    value = "Activo/a.";
-                } else {
-                    value = "Inactivo/a.";
-                }
-            }
-            return super.getTableCellRendererComponent(tabla, value, isSelected, hasFocus, row, column);
-        }
-    };
 
     public ManejoDeDatos() {
         initComponents();
@@ -355,7 +333,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     private void jTablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablaMouseClicked
         // TODO add your handling code here:
-         try {
+        try {
             int fila = jTabla.getSelectedRow();//Declaro la varible fila
             jtNombre.setText((String) modelo.getValueAt(fila, 0));
             jtApellido.setText((String) modelo.getValueAt(fila, 1));
@@ -368,11 +346,13 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
             dato = formatoDelTexto.parse(fecha);
             jdFecha.setDate(dato);
             jtBuscar.setText("");
+
         } catch (ArrayIndexOutOfBoundsException ai) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un Alumno de la tabla.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
+
         } catch (ParseException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(ManejoDeDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jTablaMouseClicked
 
@@ -385,7 +365,6 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
         // TODO add your handling code here:
-
         if (jtNombre.getText().equals("") && jtApellido.getText().equals("")
                 && jtDni.getText().equals("") && jdFecha.getDate() == null) {
             JOptionPane.showMessageDialog(
@@ -458,11 +437,20 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 al.setFechaNac(jdFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
                 aData.modificarAlumno(al);
-                System.out.println(al);
-                borrar();
-                borrarFilas();
+                // Actualiza los datos en el modelo de la tabla
+                int fila = jTabla.getSelectedRow();
+                if (fila != -1) {
+                    modelo.setValueAt(nuevoNombre, fila, 0); // Actualiza el nombre
+                    modelo.setValueAt(nuevoApellido, fila, 1); // Actualiza el apellido
+                    modelo.setValueAt(nuevoDni, fila, 2); // Actualiza el DNI
+                    modelo.setValueAt(nuevaFechaNacimiento, fila, 3); // Actualiza la fecha de nacimiento
+                }
+
+// Notifica a la tabla que los datos han cambiado
+                modelo.fireTableDataChanged();
             }
         }
+        borrar();
     }//GEN-LAST:event_jbModificarActionPerformed
 
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
@@ -490,71 +478,110 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     private void jComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboActionPerformed
         // TODO add your handling code here:
-
-        jTabla.getColumnModel().getColumn(4).setCellRenderer(renderer);
         if (jCombo.getSelectedItem().equals("Por Dni")) {
+            jrActivos.setSelected(false);
+            jrActivos.setEnabled(false);
+            jrNoActivos.setSelected(false);
+            jrNoActivos.setEnabled(false);
+            borrar();
             activar();
             jtBuscar.setText("Ingrese DNI");
             borrarFilas();
-
         } else if (jCombo.getSelectedItem().equals("Por Nombre")) {
+            jrActivos.setSelected(false);
+            jrActivos.setEnabled(false);
+            jrNoActivos.setSelected(false);
+            jrNoActivos.setEnabled(false);
+            borrar();
             activar();
             jtBuscar.setText("Ingrese Nombre");
             borrarFilas();
-
         } else if (jCombo.getSelectedItem().equals("Por Apellido")) {
+            jrActivos.setSelected(false);
+            jrActivos.setEnabled(false);
+            jrNoActivos.setSelected(false);
+            jrNoActivos.setEnabled(false);
+            borrar();
             activar();
             jtBuscar.setText("Ingrese Apellido");
             borrarFilas();
-
         } else if (jCombo.getSelectedItem().equals("Todos")) {
+            jrActivos.setSelected(false);
+            jrActivos.setEnabled(false);
+            jrNoActivos.setSelected(false);
+            jrNoActivos.setEnabled(false);
+            borrar();
             activar();
             borrarFilas();
-            for (Alumno alu : aData.listarAlumnos()) {
+            for (Alumno alu : aData.listarTodosAlumnos()) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
                 modelo.addRow(new Object[]{
-                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), alu.isEstado()
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                 });
-            }
 
-        } else if (jCombo.getSelectedIndex() == 0 ) {
-            
-             borrarFilas();
+            }
+            jTabla.repaint();
+
+        } else if (jCombo.getSelectedIndex() == 0) {
+            jrActivos.setSelected(false);
+            jrActivos.setEnabled(false);
+            jrNoActivos.setSelected(false);
+            jrNoActivos.setEnabled(false);
+            borrarFilas();
             borrar();
-           bloquear();
-            
-            
+            bloquear();
+
         }
     }//GEN-LAST:event_jComboActionPerformed
 
     private void jrActivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrActivosActionPerformed
-        // TODO add your handling code here:
-        jrNoActivos.setSelected(false);
-        jTabla.getColumnModel().getColumn(4).setCellRenderer(renderer);
-        jTabla.setRowSorter(sorte);
-        if (jrActivos.isSelected()) {
-            // Aplicar el filtro para mostrar solo alumnos activos
-            RowFilter<DefaultTableModel, Object> rowFilter = RowFilter.regexFilter("true", 4); // Reemplaza 'activo' con el valor que indica un alumno activo
-            sorte.setRowFilter(rowFilter);
-        } else {
-            // Mostrar todos los alumnos cuando el botón esté deseleccionado
-            sorte.setRowFilter(null);
+        // TODO add your handling code here
+
+        borrarFilas();
+        if (jCombo.getSelectedItem().equals("Por Nombre")) {
+            jrNoActivos.setSelected(false);
+            activosNombre();
+            jTabla.repaint();
+        } else if (jCombo.getSelectedItem().equals("Por Apellido")) {
+            jrNoActivos.setSelected(false);
+            activosApellido();
+            jTabla.repaint();
+        } else if (jCombo.getSelectedItem().equals("Por Dni")) {
+            jrNoActivos.setSelected(false);
+            activosDni();
+            jTabla.repaint();
+        } else if (jCombo.getSelectedItem().equals("Todos")) {
+            jrNoActivos.setSelected(false);
+            todosActivos();
+            jTabla.repaint();
         }
 
     }//GEN-LAST:event_jrActivosActionPerformed
 
     private void jrNoActivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrNoActivosActionPerformed
         // TODO add your handling code here:
-        jrActivos.setSelected(false);
-        jTabla.getColumnModel().getColumn(4).setCellRenderer(renderer);
-        jTabla.setRowSorter(sorte);
-        if (jrNoActivos.isSelected()) {
-            // Aplicar el filtro para mostrar solo alumnos activos
-            RowFilter<DefaultTableModel, Object> rowFilter = RowFilter.regexFilter("false", 4); // Reemplaza 'inactivo' con el valor que indica un alumno activo
-            sorte.setRowFilter(rowFilter);
+
+        borrarFilas();
+        if (jCombo.getSelectedItem().equals("Por Nombre") && (!jtBuscar.getText().equals(""))) {
+            jrActivos.setSelected(false);
+            noActivosNombre();
+            jTabla.repaint();
+        } else if (jCombo.getSelectedItem().equals("Por Apellido") && (!jtBuscar.getText().equals(""))) {
+            jrActivos.setSelected(false);
+            noActivosApellido();
+            jTabla.repaint();
+        } else if (jCombo.getSelectedItem().equals("Por Dni") && (!jtBuscar.getText().equals(""))) {
+            jrActivos.setSelected(false);
+            noActivosDni();
+            jTabla.repaint();
+        } else if (jCombo.getSelectedItem().equals("Todos") && (!jtBuscar.getText().equals(""))) {
+            jrActivos.setSelected(false);
+            todosNoActivos();
+            jTabla.repaint();
         } else {
-            // Mostrar todos los alumnos cuando el botón esté deseleccionado
-            sorte.setRowFilter(null);
+            jrNoActivos.setEnabled(false);
         }
+
     }//GEN-LAST:event_jrNoActivosActionPerformed
 
     private void jtBuscarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtBuscarFocusGained
@@ -572,21 +599,26 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     private void jtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBuscarActionPerformed
         // TODO add your handling code here:
+
     }//GEN-LAST:event_jtBuscarActionPerformed
 
     private void jtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtBuscarKeyReleased
         // TODO add your handling code here:
-
+      
+        jrActivos.setEnabled(true);
+        jrNoActivos.setEnabled(true);
         if (jCombo.getSelectedItem().equals("Por Apellido")) {
             borrarFilas();
-            jTabla.getColumnModel().getColumn(4).setCellRenderer(renderer);
-            for (Alumno alu : aData.listarAlumnos()) {
+
+            for (Alumno alu : aData.listarTodosAlumnos()) {
                 if (alu.getApellido().toLowerCase().startsWith(jtBuscar.getText().toLowerCase())) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
                     modelo.addRow(new Object[]{
-                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), alu.isEstado()
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                     });
                 }
             }
+
             if (jtBuscar.getText().equals("")) {
                 borrarFilas();
             }
@@ -594,11 +626,11 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
         if (jCombo.getSelectedItem().equals("Por Dni")) {
             borrarFilas();
-            jTabla.getColumnModel().getColumn(4).setCellRenderer(renderer);
-            for (Alumno alu : aData.listarAlumnos()) {
+            for (Alumno alu : aData.listarTodosAlumnos()) {
                 if (String.valueOf(alu.getDni()).startsWith(jtBuscar.getText())) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
                     modelo.addRow(new Object[]{
-                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), alu.isEstado()
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                     });
                 }
             }
@@ -608,11 +640,11 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         }
         if (jCombo.getSelectedItem().equals("Por Nombre")) {
             borrarFilas();
-            jTabla.getColumnModel().getColumn(4).setCellRenderer(renderer);
-            for (Alumno alu : aData.listarAlumnos()) {
+            for (Alumno alu : aData.listarTodosAlumnos()) {
                 if (alu.getNombre().toLowerCase().startsWith(jtBuscar.getText().toLowerCase())) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
                     modelo.addRow(new Object[]{
-                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), alu.isEstado()
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                     });
                 }
             }
@@ -665,10 +697,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         jtDni.setText("");
         jtApellido.setText("");
         jtNombre.setText("");
-        jCombo.setSelectedItem("");
         jtBuscar.setText("");
         jdFecha.setDate(null);
-
     }
 
     private void armarCabecera() {
@@ -678,7 +708,6 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         modelo.addColumn("Fecha de Nacimiento");
         modelo.addColumn("Estado");
         jTabla.setModel(modelo);
-
     }
 
     private void borrarFilas() {
@@ -689,18 +718,255 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
     }
 
     private void bloquear() {
-        jrActivos.setEnabled(false);jrNoActivos.setEnabled(false);jtNombre.setEnabled(false);
-        jtApellido.setEnabled(false);jtDni.setEnabled(false);jdFecha.setEnabled(false);
-        jTabla.setEnabled(false);jtBuscar.setEnabled(false);jbBorrar.setEnabled(false);
-        jbModificar.setEnabled(false);jbEliminar.setEnabled(false);
-        
+        jrActivos.setEnabled(false);
+        jrNoActivos.setEnabled(false);
+        jtNombre.setEnabled(false);
+        jtApellido.setEnabled(false);
+        jtDni.setEnabled(false);
+        jdFecha.setEnabled(false);
+        jTabla.setEnabled(false);
+        jtBuscar.setEnabled(false);
+        jbBorrar.setEnabled(false);
+        jbModificar.setEnabled(false);
+        jbEliminar.setEnabled(false);
     }
 
     private void activar() {
-        jrActivos.setEnabled(true); jrNoActivos.setEnabled(true);jtNombre.setEnabled(true);
-        jtApellido.setEnabled(true); jtDni.setEnabled(true); jdFecha.setEnabled(true);
-        jTabla.setEnabled(true);jtBuscar.setEnabled(true);jbBorrar.setEnabled(true);
-        jbModificar.setEnabled(true); jbEliminar.setEnabled(true);
-        
+        jrActivos.setEnabled(true);
+        jrNoActivos.setEnabled(true);
+        jtNombre.setEnabled(true);
+        jtApellido.setEnabled(true);
+        jtDni.setEnabled(true);
+        jdFecha.setEnabled(true);
+        jTabla.setEnabled(true);
+        jtBuscar.setEnabled(true);
+        jbBorrar.setEnabled(true);
+        jbModificar.setEnabled(true);
+        jbEliminar.setEnabled(true);
+    }
+
+    private void activosNombre() {
+        char letra;
+        if (jrActivos.isSelected()) {
+            if (!jtBuscar.getText().equals("")) {
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                List<Alumno> alumnos = aData.obtenerActivosPorNombre(letra);
+                System.out.println(alumnos);
+                // Actualizar la tabla con los resultados obtenidos
+                for (Alumno alu : alumnos) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
+            }
+        } else {
+            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+            // Mostrar todos los alumnos cuando el botón esté deseleccionado
+            for (Alumno alu : aData.listarTodosPorNombre(letra)) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                modelo.addRow(new Object[]{
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                });
+            }
+        }
+    }
+
+    private void noActivosNombre() {
+        char letra;
+        if (jrNoActivos.isSelected()) {
+            if (!jtBuscar.getText().equals("")) {
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                List<Alumno> alumnos = aData.obtenerNoActivosPorNombre(letra);
+                System.out.println(alumnos);
+                // Actualizar la tabla con los resultados obtenidos
+                for (Alumno alu : alumnos) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
+            }
+        } else {
+            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+            // Mostrar todos los alumnos cuando el botón esté deseleccionado
+            for (Alumno alu : aData.listarTodosPorNombre(letra)) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                modelo.addRow(new Object[]{
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                });
+            }
+        }
+    }
+
+    private void activosApellido() {
+        char letra;
+        if (jrActivos.isSelected()) {
+            if (!jtBuscar.getText().equals("")) {
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                List<Alumno> alumnos = aData.obtenerActivosPorApellido(letra);
+                System.out.println(alumnos);
+                // Actualizar la tabla con los resultados obtenidos
+                for (Alumno alu : alumnos) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
+            }
+        } else {
+            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+            // Mostrar todos los alumnos cuando el botón esté deseleccionado
+            for (Alumno alu : aData.listarTodosPorApellido(letra)) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                modelo.addRow(new Object[]{
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                });
+            }
+        }
+    }
+
+    private void noActivosApellido() {
+        char letra;
+        if (jrNoActivos.isSelected()) {
+            if (!jtBuscar.getText().equals("")) {
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                List<Alumno> alumnos = aData.obtenerNoActivosPorApellido(letra);
+                System.out.println(alumnos);
+                // Actualizar la tabla con los resultados obtenidos
+                for (Alumno alu : alumnos) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
+            }
+        } else {
+            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+            // Mostrar todos los alumnos cuando el botón esté deseleccionado
+            for (Alumno alu : aData.listarTodosPorApellido(letra)) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                modelo.addRow(new Object[]{
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                });
+            }
+        }
+    }
+
+    private void activosDni() {
+        char letra;
+        if (jrActivos.isSelected()) {
+            if (!jtBuscar.getText().equals("")) {
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                List<Alumno> alumnos = aData.obtenerActivosPorDni(letra);
+                System.out.println(alumnos);
+                // Actualizar la tabla con los resultados obtenidos
+                for (Alumno alu : alumnos) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
+            }
+        } else {
+            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+            // Mostrar todos los alumnos cuando el botón esté deseleccionado
+            for (Alumno alu : aData.listarTodosPorDni(letra)) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                modelo.addRow(new Object[]{
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                });
+            }
+        }
+    }
+
+    private void noActivosDni() {
+        char letra;
+        if (jrNoActivos.isSelected()) {
+            if (!jtBuscar.getText().equals("")) {
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                List<Alumno> alumnos = aData.obtenerNoActivosPorDni(letra);
+                System.out.println(alumnos);
+                // Actualizar la tabla con los resultados obtenidos
+                for (Alumno alu : alumnos) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
+            }
+        } else {
+            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+            // Mostrar todos los alumnos cuando el botón esté deseleccionado
+            for (Alumno alu : aData.listarTodosPorDni(letra)) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                modelo.addRow(new Object[]{
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                });
+            }
+        }
+    }
+
+    private void todosActivos() {
+        char letra;
+        if (jrActivos.isSelected()) {
+            if (jCombo.getSelectedItem().equals("Todos")) {
+
+                List<Alumno> alumnos = aData.listarTodosActivos();
+
+                // Actualizar la tabla con los resultados obtenidos
+                for (Alumno alu : alumnos) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
+            }
+        } else {
+
+            for (Alumno alu : aData.listarTodosAlumnos()) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                modelo.addRow(new Object[]{
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                });
+            }
+        }
+    }
+
+    private void todosNoActivos() {
+        if (jrNoActivos.isSelected()) {
+            if (jCombo.getSelectedItem().equals("Todos")) {
+
+                List<Alumno> alumnos = aData.listarTodosNoActivos();
+
+                // Actualizar la tabla con los resultados obtenidos
+                for (Alumno alu : alumnos) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
+            }
+        } else {
+
+            for (Alumno alu : aData.listarTodosAlumnos()) {
+                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                modelo.addRow(new Object[]{
+                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                });
+            }
+        }
     }
 }

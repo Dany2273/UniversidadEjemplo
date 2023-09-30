@@ -324,7 +324,7 @@ public class CargaDeNotas extends javax.swing.JInternalFrame {
  private void cargarCombo() {
 
     JCBAlumno.addItem(null);
-        for (Alumno alum : aData.listarAlumnos()) {
+        for (Alumno alum : aData.listarTodosAlumnos()) {
      JCBAlumno.addItem(alum);
 
         }
