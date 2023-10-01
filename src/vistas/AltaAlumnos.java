@@ -7,6 +7,7 @@ package vistas;
 
 import accesoADatos.AlumnoData;
 import entidades.Alumno;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.text.ParseException;
@@ -31,7 +32,8 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
 
     public AltaAlumnos() {
         initComponents();
-
+        jTabla.setShowGrid(true);//Metodo para que se ven las lines de la tabla
+        jTabla.setGridColor(Color.lightGray);//Metodo para cambiar de color las lineas internas
         llenarCombo();
         llenarCombo1();
         armarCabecera();
@@ -161,6 +163,7 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
             }
         });
 
+        jTabla.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -382,25 +385,25 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
                 borrar();
             }
         }
-       
+
     }//GEN-LAST:event_jbGuardarActionPerformed
 
     private void jbReinscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbReinscribirActionPerformed
-        
+
         if (jNombre.getText().equals("") && jApellido.getText().equals("") && jDni.getText().equals("") && jdFecha.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un Alumno de la tabla.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        if (jCombo1.getSelectedItem().equals("Reinscribir Alumno")&&jCombo.getSelectedItem().equals("Inactivo")) {
-            
-             JOptionPane.showMessageDialog(
-        null,
-        "El alumno seleccionado ya se encuentra inactivo y no se realizaron cambios en su estado.",
-        "Estado Inactivo",
-        JOptionPane.WARNING_MESSAGE
-    );
-        }else{
+
+        if (jCombo1.getSelectedItem().equals("Reinscribir Alumno") && jCombo.getSelectedItem().equals("Inactivo")) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "El alumno seleccionado ya se encuentra inactivo y no se realizaron cambios en su estado.",
+                    "Estado Inactivo",
+                    JOptionPane.WARNING_MESSAGE
+            );
+        } else {
             al = aData.buscarAlumnoPorDni((int) modelo.getValueAt(jTabla.getSelectedRow(), 2));
 
             int resp = JOptionPane.showConfirmDialog(null, "¿Desea reinscribir al Alumno seleccionado?", "Atención!",
@@ -411,7 +414,7 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
             modelo.removeRow(jTabla.getSelectedRow());
             borrar();
         }
-        
+
     }//GEN-LAST:event_jbReinscribirActionPerformed
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
@@ -443,15 +446,23 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
 
         if (jCombo1.getSelectedItem().equals("Nuevo Alumno")) {
-            jNombre.setEnabled(true);jApellido.setEnabled(true);
-            jbGuardar.setEnabled(true);jDni.setEnabled(true);jdFecha.setEnabled(true);
-            jbReinscribir.setEnabled(false);jTabla.setEnabled(false);
+            jNombre.setEnabled(true);
+            jApellido.setEnabled(true);
+            jbGuardar.setEnabled(true);
+            jDni.setEnabled(true);
+            jdFecha.setEnabled(true);
+            jbReinscribir.setEnabled(false);
+            jTabla.setEnabled(false);
             borrar();
             borrarFilas();
 
         } else if (jCombo1.getSelectedItem().equals("Reinscribir Alumno")) {
-            jbReinscribir.setEnabled(true);jNombre.setEditable(false);jApellido.setEditable(false);
-            jbGuardar.setEnabled(false);jDni.setEditable(false);jdFecha.setEnabled(false);
+            jbReinscribir.setEnabled(true);
+            jNombre.setEditable(false);
+            jApellido.setEditable(false);
+            jbGuardar.setEnabled(false);
+            jDni.setEditable(false);
+            jdFecha.setEnabled(false);
             jTabla.setEnabled(true);
             borrar();
             borrarFilas();
@@ -465,8 +476,12 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
                 }
             }
         } else if (jCombo1.getSelectedItem().equals("Seleccione Accion")) {
-            jbReinscribir.setEnabled(false);jNombre.setEnabled(false);jApellido.setEnabled(false);
-            jbGuardar.setEnabled(false);jDni.setEnabled(false);jdFecha.setEnabled(false);
+            jbReinscribir.setEnabled(false);
+            jNombre.setEnabled(false);
+            jApellido.setEnabled(false);
+            jbGuardar.setEnabled(false);
+            jDni.setEnabled(false);
+            jdFecha.setEnabled(false);
             jTabla.setEnabled(false);
             borrar();
             borrarFilas();

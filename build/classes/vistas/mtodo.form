@@ -334,6 +334,9 @@
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jTnombre1">
+          <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTnombre1FocusGained"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jTa&#xf1;o1">
           <Events>

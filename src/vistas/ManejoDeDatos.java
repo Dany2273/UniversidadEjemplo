@@ -2,6 +2,7 @@ package vistas;
 
 import accesoADatos.AlumnoData;
 import entidades.Alumno;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.text.ParseException;
@@ -33,6 +34,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     public ManejoDeDatos() {
         initComponents();
+        jTabla.setShowGrid(true);//Metodo para que se ven las lines de la tabla
+        jTabla.setGridColor(Color.lightGray);//Metodo para cambiar de color las lineas internas
         bloquear();
         llenarCombo1();
         armarCabecera();
@@ -170,6 +173,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Fecha de Nacimiento:");
+
+        jdFecha.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
         jrActivos.setBackground(new java.awt.Color(255, 255, 255));
         jrActivos.setForeground(new java.awt.Color(255, 255, 255));
@@ -455,6 +460,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
         // TODO add your handling code here:
+        
         if (jtNombre.getText().equals("") && jtApellido.getText().equals("") && jtDni.getText().equals("") && jdFecha.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un Alumno de la tabla.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
@@ -464,10 +470,16 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         int fila = jTabla.getSelectedRow();
         if (resp == 0) {
             al = aData.buscarAlumnoPorDni((int) modelo.getValueAt(fila, 2));
-            aData.eliminarAlumno(al.getIdAlumno());
-
+            if(al.isEstado()==true){
+                 aData.eliminarAlumno(al.getIdAlumno());
+                  modelo.fireTableDataChanged();
             borrar();
-            borrarFilas();
+            modelo.setValueAt("Inactivo/a", fila, 4);
+            }else{
+                JOptionPane.showMessageDialog(null, "El Alumno seleccionado ya se encuentra dado de baja.");
+            }
+           
+           
         }
 
     }//GEN-LAST:event_jbEliminarActionPerformed
@@ -479,39 +491,28 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
     private void jComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboActionPerformed
         // TODO add your handling code here:
         if (jCombo.getSelectedItem().equals("Por Dni")) {
-            jrActivos.setSelected(false);
-            jrActivos.setEnabled(false);
-            jrNoActivos.setSelected(false);
-            jrNoActivos.setEnabled(false);
+           
             borrar();
             activar();
             jtBuscar.setText("Ingrese DNI");
             borrarFilas();
         } else if (jCombo.getSelectedItem().equals("Por Nombre")) {
-            jrActivos.setSelected(false);
-            jrActivos.setEnabled(false);
-            jrNoActivos.setSelected(false);
-            jrNoActivos.setEnabled(false);
+           
             borrar();
             activar();
             jtBuscar.setText("Ingrese Nombre");
             borrarFilas();
         } else if (jCombo.getSelectedItem().equals("Por Apellido")) {
-            jrActivos.setSelected(false);
-            jrActivos.setEnabled(false);
-            jrNoActivos.setSelected(false);
-            jrNoActivos.setEnabled(false);
+            
             borrar();
             activar();
             jtBuscar.setText("Ingrese Apellido");
             borrarFilas();
         } else if (jCombo.getSelectedItem().equals("Todos")) {
-            jrActivos.setSelected(false);
-            jrActivos.setEnabled(false);
-            jrNoActivos.setSelected(false);
-            jrNoActivos.setEnabled(false);
+            
             borrar();
             activar();
+            jtBuscar.setEnabled(false);
             borrarFilas();
             for (Alumno alu : aData.listarTodosAlumnos()) {
                 String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
@@ -523,10 +524,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
             jTabla.repaint();
 
         } else if (jCombo.getSelectedIndex() == 0) {
-            jrActivos.setSelected(false);
-            jrActivos.setEnabled(false);
-            jrNoActivos.setSelected(false);
-            jrNoActivos.setEnabled(false);
+            
             borrarFilas();
             borrar();
             bloquear();
@@ -562,25 +560,24 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
 
         borrarFilas();
-        if (jCombo.getSelectedItem().equals("Por Nombre") && (!jtBuscar.getText().equals(""))) {
+        if (jCombo.getSelectedItem().equals("Por Nombre")) {
             jrActivos.setSelected(false);
             noActivosNombre();
             jTabla.repaint();
-        } else if (jCombo.getSelectedItem().equals("Por Apellido") && (!jtBuscar.getText().equals(""))) {
+        } else if (jCombo.getSelectedItem().equals("Por Apellido")) {
             jrActivos.setSelected(false);
             noActivosApellido();
             jTabla.repaint();
-        } else if (jCombo.getSelectedItem().equals("Por Dni") && (!jtBuscar.getText().equals(""))) {
+        } else if (jCombo.getSelectedItem().equals("Por Dni")) {
             jrActivos.setSelected(false);
             noActivosDni();
             jTabla.repaint();
-        } else if (jCombo.getSelectedItem().equals("Todos") && (!jtBuscar.getText().equals(""))) {
+        } else if (jCombo.getSelectedItem().equals("Todos")) {
+           
             jrActivos.setSelected(false);
             todosNoActivos();
             jTabla.repaint();
-        } else {
-            jrNoActivos.setEnabled(false);
-        }
+        } 
 
     }//GEN-LAST:event_jrNoActivosActionPerformed
 
@@ -588,12 +585,15 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (jtBuscar.getText().equals("Ingrese DNI")) {
             jtBuscar.setText("");
+            jrActivos.setEnabled(true);jrNoActivos.setEnabled(true);
         }
         if (jtBuscar.getText().equalsIgnoreCase("Ingrese Apellido")) {
             jtBuscar.setText("");
+            jrActivos.setEnabled(true);jrNoActivos.setEnabled(true);
         }
         if (jtBuscar.getText().equalsIgnoreCase("Ingrese Nombre")) {
             jtBuscar.setText("");
+            jrActivos.setEnabled(true);jrNoActivos.setEnabled(true);
         }
     }//GEN-LAST:event_jtBuscarFocusGained
 
@@ -604,9 +604,6 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     private void jtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtBuscarKeyReleased
         // TODO add your handling code here:
-      
-        jrActivos.setEnabled(true);
-        jrNoActivos.setEnabled(true);
         if (jCombo.getSelectedItem().equals("Por Apellido")) {
             borrarFilas();
 
@@ -694,7 +691,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
     }
 
     private void borrar() {
-        jtDni.setText("");
+        jtDni.setText("");jrActivos.setSelected(false);jrNoActivos.setSelected(false);
         jtApellido.setText("");
         jtNombre.setText("");
         jtBuscar.setText("");
@@ -762,7 +759,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            if (!jtBuscar.getText().equals("")){
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
             // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
             // Mostrar todos los alumnos cuando el botón esté deseleccionado
             for (Alumno alu : aData.listarTodosPorNombre(letra)) {
@@ -771,6 +769,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                     alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                 });
             }
+            }
+            
         }
     }
 
@@ -791,7 +791,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            if (!jtBuscar.getText().equals("")){
+                 letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
             // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
             // Mostrar todos los alumnos cuando el botón esté deseleccionado
             for (Alumno alu : aData.listarTodosPorNombre(letra)) {
@@ -800,6 +801,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                     alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                 });
             }
+            }
+           
         }
     }
 
@@ -820,7 +823,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            if (!jtBuscar.getText().equals("")){
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
             // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
             // Mostrar todos los alumnos cuando el botón esté deseleccionado
             for (Alumno alu : aData.listarTodosPorApellido(letra)) {
@@ -829,6 +833,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                     alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                 });
             }
+            }
+            
         }
     }
 
@@ -849,7 +855,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            if (!jtBuscar.getText().equals("")){
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
             // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
             // Mostrar todos los alumnos cuando el botón esté deseleccionado
             for (Alumno alu : aData.listarTodosPorApellido(letra)) {
@@ -858,6 +865,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                     alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                 });
             }
+            }
+            
         }
     }
 
@@ -878,7 +887,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            if (!jtBuscar.getText().equals("")){
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
             // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
             // Mostrar todos los alumnos cuando el botón esté deseleccionado
             for (Alumno alu : aData.listarTodosPorDni(letra)) {
@@ -887,6 +897,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                     alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                 });
             }
+            }
+            
         }
     }
 
@@ -907,7 +919,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+            if (!jtBuscar.getText().equals("")){
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
             // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
             // Mostrar todos los alumnos cuando el botón esté deseleccionado
             for (Alumno alu : aData.listarTodosPorDni(letra)) {
@@ -916,6 +929,8 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                     alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
                 });
             }
+            }
+            
         }
     }
 

@@ -17,7 +17,11 @@ public class mtodo extends javax.swing.JInternalFrame {
 
     MateriaData mData = new MateriaData();
     Materia mat = new Materia();
-    DefaultTableModel tablita = new DefaultTableModel();
+    DefaultTableModel tablita = new DefaultTableModel(){
+         public boolean isCellEditable(int f, int c) {
+            return false;
+        }
+    };
 
     public mtodo() {
         initComponents();
@@ -200,6 +204,12 @@ public class mtodo extends javax.swing.JInternalFrame {
         jBguardar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBguardar1ActionPerformed(evt);
+            }
+        });
+
+        jTnombre1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTnombre1FocusGained(evt);
             }
         });
 
@@ -522,6 +532,10 @@ limpiarTabla();
         jTaño1.setEnabled(true);
         jTnombre1.setEnabled(true);
     }//GEN-LAST:event_jTvisorMouseClicked
+
+    private void jTnombre1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTnombre1FocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTnombre1FocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

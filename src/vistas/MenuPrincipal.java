@@ -21,6 +21,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
      * Creates new form MenuPrincipal
      */
     public MenuPrincipal() {
+//        this.setUndecorated(true);
         initComponents();
         this.setLocationRelativeTo(null);
          setIconImage(new ImageIcon(getClass().getResource("/Iconos/ArgProgIcon.png")).getImage());//esta linea cambia el icono a uno q esta en la carpeta iconos
@@ -58,6 +59,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setIconImages(null);
 
         javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
         Escritorio.setLayout(EscritorioLayout);
