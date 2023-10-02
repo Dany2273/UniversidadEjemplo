@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -30,15 +32,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         }
     };
 
-    private TableRowSorter<DefaultTableModel> sorte = new TableRowSorter<>(modelo);
+    private TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
 
     public ManejoDeDatos() {
         initComponents();
         jTabla.setShowGrid(true);//Metodo para que se ven las lines de la tabla
         jTabla.setGridColor(Color.lightGray);//Metodo para cambiar de color las lineas internas
+        // Asocia el TableRowSorter al JTable
+        jTabla.setRowSorter(sorter);
         bloquear();
         llenarCombo1();
         armarCabecera();
+
     }
 
     /**
@@ -84,7 +89,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         jPanel1.setToolTipText("");
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Manejo de datos de Alumnos.");
 
@@ -216,7 +221,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -251,11 +256,11 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 616, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(162, 162, 162)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jrActivos)
-                        .addGap(69, 69, 69)
+                        .addGap(31, 31, 31)
                         .addComponent(jrNoActivos)))
-                .addContainerGap())
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,18 +299,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                             .addComponent(jbEliminar)
                             .addComponent(jbSalir)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -440,7 +445,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
 
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
         // TODO add your handling code here:
-        
+
         if (jtNombre.getText().equals("") && jtApellido.getText().equals("") && jtDni.getText().equals("") && jdFecha.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un Alumno de la tabla.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
@@ -450,16 +455,15 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         int fila = jTabla.getSelectedRow();
         if (resp == 0) {
             al = aData.buscarAlumnoPorDni((int) modelo.getValueAt(fila, 2));
-            if(al.isEstado()==true){
-                 aData.eliminarAlumno(al.getIdAlumno());
-                  modelo.fireTableDataChanged();
-            borrar();
-            modelo.setValueAt("Inactivo/a", fila, 4);
-            }else{
+            if (al.isEstado() == true) {
+                aData.eliminarAlumno(al.getIdAlumno());
+                modelo.fireTableDataChanged();
+                borrar();
+                modelo.setValueAt("Inactivo/a", fila, 4);
+            } else {
                 JOptionPane.showMessageDialog(null, "El Alumno seleccionado ya se encuentra dado de baja.");
             }
-           
-           
+
         }
 
     }//GEN-LAST:event_jbEliminarActionPerformed
@@ -471,25 +475,25 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
     private void jComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboActionPerformed
         // TODO add your handling code here:
         if (jCombo.getSelectedItem().equals("Por Dni")) {
-           
+
             borrar();
             activar();
             jtBuscar.setText("Ingrese DNI");
             borrarFilas();
         } else if (jCombo.getSelectedItem().equals("Por Nombre")) {
-           
+
             borrar();
             activar();
             jtBuscar.setText("Ingrese Nombre");
             borrarFilas();
         } else if (jCombo.getSelectedItem().equals("Por Apellido")) {
-            
+
             borrar();
             activar();
             jtBuscar.setText("Ingrese Apellido");
             borrarFilas();
         } else if (jCombo.getSelectedItem().equals("Todos")) {
-            
+
             borrar();
             activar();
             jtBuscar.setEnabled(false);
@@ -504,7 +508,7 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
             jTabla.repaint();
 
         } else if (jCombo.getSelectedIndex() == 0) {
-            
+
             borrarFilas();
             borrar();
             bloquear();
@@ -553,11 +557,11 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
             noActivosDni();
             jTabla.repaint();
         } else if (jCombo.getSelectedItem().equals("Todos")) {
-           
+
             jrActivos.setSelected(false);
             todosNoActivos();
             jTabla.repaint();
-        } 
+        }
 
     }//GEN-LAST:event_jrNoActivosActionPerformed
 
@@ -565,15 +569,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if (jtBuscar.getText().equals("Ingrese DNI")) {
             jtBuscar.setText("");
-            jrActivos.setEnabled(true);jrNoActivos.setEnabled(true);
+            jrActivos.setEnabled(true);
+            jrNoActivos.setEnabled(true);
         }
         if (jtBuscar.getText().equalsIgnoreCase("Ingrese Apellido")) {
             jtBuscar.setText("");
-            jrActivos.setEnabled(true);jrNoActivos.setEnabled(true);
+            jrActivos.setEnabled(true);
+            jrNoActivos.setEnabled(true);
         }
         if (jtBuscar.getText().equalsIgnoreCase("Ingrese Nombre")) {
             jtBuscar.setText("");
-            jrActivos.setEnabled(true);jrNoActivos.setEnabled(true);
+            jrActivos.setEnabled(true);
+            jrNoActivos.setEnabled(true);
         }
     }//GEN-LAST:event_jtBuscarFocusGained
 
@@ -670,7 +677,9 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
     }
 
     private void borrar() {
-        jtDni.setText("");jrActivos.setSelected(false);jrNoActivos.setSelected(false);
+        jtDni.setText("");
+        jrActivos.setSelected(false);
+        jrNoActivos.setSelected(false);
         jtApellido.setText("");
         jtNombre.setText("");
         jtBuscar.setText("");
@@ -738,18 +747,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            if (!jtBuscar.getText().equals("")){
+            if (!jtBuscar.getText().equals("")) {
                 letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
-            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
-            // Mostrar todos los alumnos cuando el botón esté deseleccionado
-            for (Alumno alu : aData.listarTodosPorNombre(letra)) {
-                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
-                modelo.addRow(new Object[]{
-                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
-                });
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                // Mostrar todos los alumnos cuando el botón esté deseleccionado
+                for (Alumno alu : aData.listarTodosPorNombre(letra)) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
             }
-            }
-            
+
         }
     }
 
@@ -770,18 +779,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            if (!jtBuscar.getText().equals("")){
-                 letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
-            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
-            // Mostrar todos los alumnos cuando el botón esté deseleccionado
-            for (Alumno alu : aData.listarTodosPorNombre(letra)) {
-                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
-                modelo.addRow(new Object[]{
-                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
-                });
+            if (!jtBuscar.getText().equals("")) {
+                letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                // Mostrar todos los alumnos cuando el botón esté deseleccionado
+                for (Alumno alu : aData.listarTodosPorNombre(letra)) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
             }
-            }
-           
+
         }
     }
 
@@ -802,18 +811,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            if (!jtBuscar.getText().equals("")){
+            if (!jtBuscar.getText().equals("")) {
                 letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
-            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
-            // Mostrar todos los alumnos cuando el botón esté deseleccionado
-            for (Alumno alu : aData.listarTodosPorApellido(letra)) {
-                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
-                modelo.addRow(new Object[]{
-                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
-                });
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                // Mostrar todos los alumnos cuando el botón esté deseleccionado
+                for (Alumno alu : aData.listarTodosPorApellido(letra)) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
             }
-            }
-            
+
         }
     }
 
@@ -834,18 +843,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            if (!jtBuscar.getText().equals("")){
+            if (!jtBuscar.getText().equals("")) {
                 letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
-            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
-            // Mostrar todos los alumnos cuando el botón esté deseleccionado
-            for (Alumno alu : aData.listarTodosPorApellido(letra)) {
-                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
-                modelo.addRow(new Object[]{
-                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
-                });
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                // Mostrar todos los alumnos cuando el botón esté deseleccionado
+                for (Alumno alu : aData.listarTodosPorApellido(letra)) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
             }
-            }
-            
+
         }
     }
 
@@ -866,18 +875,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            if (!jtBuscar.getText().equals("")){
+            if (!jtBuscar.getText().equals("")) {
                 letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
-            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
-            // Mostrar todos los alumnos cuando el botón esté deseleccionado
-            for (Alumno alu : aData.listarTodosPorDni(letra)) {
-                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
-                modelo.addRow(new Object[]{
-                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
-                });
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                // Mostrar todos los alumnos cuando el botón esté deseleccionado
+                for (Alumno alu : aData.listarTodosPorDni(letra)) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
             }
-            }
-            
+
         }
     }
 
@@ -898,18 +907,18 @@ public class ManejoDeDatos extends javax.swing.JInternalFrame {
                 }
             }
         } else {
-            if (!jtBuscar.getText().equals("")){
+            if (!jtBuscar.getText().equals("")) {
                 letra = jtBuscar.getText().toUpperCase().charAt(0); // Obtener la primera letra ingresada
-            // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
-            // Mostrar todos los alumnos cuando el botón esté deseleccionado
-            for (Alumno alu : aData.listarTodosPorDni(letra)) {
-                String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
-                modelo.addRow(new Object[]{
-                    alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
-                });
+                // Llamar al método en AlumnoData para obtener alumnos activos que comienzan con la letra ingresada
+                // Mostrar todos los alumnos cuando el botón esté deseleccionado
+                for (Alumno alu : aData.listarTodosPorDni(letra)) {
+                    String estado = alu.isEstado() ? "Activo/a" : "Inactivo/a";
+                    modelo.addRow(new Object[]{
+                        alu.getNombre(), alu.getApellido(), alu.getDni(), alu.getFechaNac(), estado
+                    });
+                }
             }
-            }
-            
+
         }
     }
 

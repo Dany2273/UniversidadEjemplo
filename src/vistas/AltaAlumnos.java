@@ -310,6 +310,10 @@ public class AltaAlumnos extends javax.swing.JInternalFrame {
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         // TODO add your handling code here:
+        if(jDni.getText().length()>8){
+            JOptionPane.showMessageDialog(null, "La cantidad de digitos ingresados en DNI exede el limite permitido(8).");
+            return;
+        }
         if (jCombo1.getSelectedItem().equals("Nuevo Alumno")) {
             if (jNombre.getText().equals("") && jApellido.getText().equals("")
                     && jDni.getText().equals("") && jdFecha.getDate() == null) {
